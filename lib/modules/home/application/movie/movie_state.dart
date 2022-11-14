@@ -1,0 +1,69 @@
+part of 'movie_bloc.dart';
+
+enum MovieStatus { initail, loading, loaded, ended }
+
+abstract class MovieState extends Equatable {
+  const MovieState();
+}
+
+class MovieInitial extends MovieState {
+  @override
+  List<Object?> get props => [];
+}
+
+class MovieLoading extends MovieState {
+  @override
+  List<Object?> get props => [];
+}
+
+class MovieNextPageLoading extends MovieState {
+  @override
+  List<Object?> get props => [];
+}
+
+class MovieLoaded extends MovieState {
+  const MovieLoaded({
+    this.movie,
+    this.nextMovies,
+    this.pageNumber = 0,
+    this.status = MovieStatus.initail,
+  });
+
+  final List<Movies>? movie;
+  final List<Movies>? nextMovies;
+  final int pageNumber;
+  final MovieStatus status;
+
+  MovieLoaded copyWith({
+    MovieStatus? status,
+    List<Movies>? nextMovies,
+    List<Movies>? movie,
+  }) {
+    return MovieLoaded(
+      status: status ?? this.status,
+      nextMovies: nextMovies ?? this.nextMovies,
+      movie: movie ?? this.movie,
+    );
+  }
+
+  @override
+  List<Object?> get props => [movie, pageNumber, status, nextMovies];
+}
+
+class MovieNextPageLoaded extends MovieState {
+  const MovieNextPageLoaded(this.movie);
+
+  final List<Movies> movie;
+
+  @override
+  List<Object?> get props => [movie];
+}
+
+class MovieFailed extends MovieState {
+  const MovieFailed(this.message);
+
+  final String message;
+
+  @override
+  List<Object?> get props => [message];
+}

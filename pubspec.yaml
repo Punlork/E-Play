@@ -1,0 +1,40 @@
+name: e_book_app
+description: A E-Book Clone App create by CLI 
+version: 1.0.0+1
+publish_to: none
+
+environment:
+  sdk: ">=2.18.0 <3.0.0"
+  flutter: 3.3.3
+
+dependencies:
+  bloc: ^8.1.0
+  dartz: ^0.10.1
+  dio: ^4.0.6
+  equatable: ^2.0.5
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^8.1.1
+  flutter_localizations:
+    sdk: flutter
+  flutter_native_splash: ^2.2.14
+  font_awesome_flutter: ^10.2.1
+  get_it: ^7.2.0
+  go_router: ^5.1.1
+  intl: ^0.17.0
+  shared_preferences: ^2.0.15
+  url_launcher: ^6.1.6
+
+dev_dependencies:
+  bloc_test: ^9.1.0
+  flutter_test:
+    sdk: flutter
+  mocktail: ^0.3.0
+  very_good_analysis: ^3.1.0
+
+flutter:
+  uses-material-design: true
+  generate: true
+
+  assets:
+   - assets/
