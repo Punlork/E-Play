@@ -23,7 +23,7 @@ dependencies:
   go_router: ^5.1.1
   intl: ^0.17.0
   shared_preferences: ^2.0.15
-  url_launcher: ^6.1.6
+  url_launcher: ^6.1.7
 
 dev_dependencies:
   bloc_test: ^9.1.0
