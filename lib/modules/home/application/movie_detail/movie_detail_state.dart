@@ -14,7 +14,7 @@ class MovieDetailLoading extends MovieDetailState {}
 class MovieDetailLoaded extends MovieDetailState {
   const MovieDetailLoaded(this.movieDetail);
 
-  final MovieDetailResModelData movieDetail;
+  final List<MovieDetailResModel> movieDetail;
 }
 
 class MovieDetailFailed extends MovieDetailState {

@@ -8,10 +8,10 @@ abstract class MovieDetailEvent extends Equatable {
 }
 
 class OnGetMovieDetail extends MovieDetailEvent {
-  const OnGetMovieDetail({
-    this.movieId,
-  });
+  const OnGetMovieDetail(this.id);
+  final int id;
+}
 
-  final int? movieId;
-
+class OnRemoveMovieDetail extends MovieDetailEvent {
+  const OnRemoveMovieDetail();
 }

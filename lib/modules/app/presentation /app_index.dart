@@ -1,9 +1,7 @@
 import 'package:e_book_app/common/l10n/l10n.dart';
-import 'package:e_book_app/modules/app/application/theme/theme_bloc.dart';
+import 'package:e_book_app/index.dart';
 import 'package:e_book_app/modules/app_provider.dart';
 import 'package:e_book_app/modules/app_router.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 class AppIndex extends StatelessWidget {
@@ -41,6 +39,7 @@ class _AppIndex extends StatelessWidget {
             bottomNavigationBarTheme: const BottomNavigationBarThemeData(
               backgroundColor: Colors.white,
             ),
+            textTheme: _textTheme(),
           ),
           darkTheme: ThemeData(
             colorScheme: const ColorScheme.dark(
@@ -51,6 +50,7 @@ class _AppIndex extends StatelessWidget {
               backgroundColor: Colors.black,
               unselectedItemColor: Colors.grey,
             ),
+            textTheme: _textTheme(),
           ),
           themeMode: state,
           localizationsDelegates: const [
@@ -61,6 +61,32 @@ class _AppIndex extends StatelessWidget {
           supportedLocales: AppLocalizations.supportedLocales,
         );
       },
+    );
+  }
+
+  TextTheme _textTheme() {
+    return TextTheme(
+      headlineLarge: GoogleFonts.quicksand(
+        letterSpacing: 3,
+        fontWeight: FontWeight.bold,
+        fontSize: 22,
+      ),
+      titleLarge: GoogleFonts.ptSerifCaption(
+        color: AppColors.red,
+        fontSize: 14,
+        fontWeight: FontWeight.bold,
+        letterSpacing: 3,
+      ),
+      labelMedium: GoogleFonts.notoSans(
+        fontWeight: FontWeight.bold,
+        fontSize: 10,
+        color: AppColors.white,
+      ),
+      labelLarge: GoogleFonts.openSans(
+        fontSize: 11,
+        color: AppColors.gray,
+        // fontWeight: FontWeight.bold,
+      ),
     );
   }
 }

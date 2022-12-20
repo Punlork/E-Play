@@ -1,8 +1,4 @@
-import 'package:dio/dio.dart';
-import 'package:e_book_app/modules/app/shared/theme_service_locator.dart';
-import 'package:e_book_app/modules/home/shared/movie_service_locator.dart';
-import 'package:get_it/get_it.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:e_book_app/index.dart';
 
 GetIt getIt = GetIt.instance;
 
@@ -24,7 +20,7 @@ Future<void> initializeDependencies() async {
 class DemoService {
   Future<DemoService> init() async {
     return Future.delayed(
-      const Duration(),
+      const Duration(milliseconds: 100),
       () {
         prints();
         return this;

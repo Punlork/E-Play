@@ -1,4 +1,4 @@
-part of 'movie_bloc.dart';
+part of 'movie_bloc.dart.txt';
 
 enum MovieStatus { initail, loading, loaded, ended }
 

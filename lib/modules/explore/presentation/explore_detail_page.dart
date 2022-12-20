@@ -1,5 +1,4 @@
 import 'package:e_book_app/modules/component/app_padding.dart';
-import 'package:e_book_app/modules/component/book_card.dart';
 import 'package:e_book_app/modules/component/icon_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

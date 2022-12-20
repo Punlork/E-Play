@@ -1,24 +1,40 @@
-import 'package:flutter/material.dart';
+import 'package:e_book_app/index.dart';
 
 class ImageCardWidget extends StatelessWidget {
-  const ImageCardWidget({super.key, required this.imgurl});
+  const ImageCardWidget({
+    super.key,
+    required this.imgUrl,
+    required this.rating,
+  });
 
-  final String imgurl;
+  final String imgUrl;
+  final num? rating;
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(6),
+    return Container(
+      margin: const EdgeInsets.only(right: 15),
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(6),
+          topLeft: Radius.circular(6),
+        ),
       ),
-      margin: const EdgeInsets.only(right: 16),
-      elevation: 10,
-      child: Container(
-        height: 150,
-        width: 120,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage(imgurl),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.only(
+          topRight: Radius.circular(6),
+          topLeft: Radius.circular(6),
+        ),
+        child: Banner(
+          message: '$rating',
+          color: AppColors.red,
+          textStyle: Theme.of(context).textTheme.labelMedium!,
+          location: BannerLocation.topEnd,
+          child: Image.network(
+            AppData.imagePath(
+              posterPath: imgUrl,
+            ),
+            fit: BoxFit.cover,
           ),
         ),
       ),

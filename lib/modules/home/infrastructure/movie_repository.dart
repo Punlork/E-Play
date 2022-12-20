@@ -1,17 +1,21 @@
 import 'package:dartz/dartz.dart';
-import 'package:e_book_app/modules/home/domain/movie_detail_model.dart';
-import 'package:e_book_app/modules/home/domain/movie_model.dart';
-import 'package:e_book_app/modules/home/domain/movie_suggestion_model.dart';
-import 'package:e_book_app/modules/home/infrastructure/movie_service.dart';
+import 'package:e_book_app/modules/index.dart';
 
 abstract class MovieRepository {
   Future<Either<String, MovieResModelData>> getMovieList({int pageNumber});
-  Future<Either<String, MovieDetailResModelData>> getMovieDetail({int movieId});
-  Future<Either<String, MovieSuggestionResModelData>> getMovieSuggestion({int movieId});
+  Future<Either<String, MovieDetailResModel>> getMovieDetail({int movieId});
+  Future<Either<String, List<MovieSuggestionResults>>> getMovieSuggestion({
+    int movieId,
+    int pageNumber,
+  });
+  Future<Either<String, List<PopularMoviesData>>> getPopularMovies({int pageNumber});
+  Future<Either<String, UpcomingMoviesModel>> getUpcomingMovies({int pageNumber});
+  Future<Either<String, NowPlayMoviesModel>> getNowPlayingMovies({int pageNumber});
+  Future<Either<String, VideoModel>> getVideoInfo({int movieId});
 }
 
-class MoviewRepositoryImpl extends MovieRepository {
-  MoviewRepositoryImpl(this.service);
+class MoviesRepositoryImpl extends MovieRepository {
+  MoviesRepositoryImpl(this.service);
 
   final MovieService service;
 
@@ -28,7 +32,7 @@ class MoviewRepositoryImpl extends MovieRepository {
   }
 
   @override
-  Future<Either<String, MovieDetailResModelData>> getMovieDetail({
+  Future<Either<String, MovieDetailResModel>> getMovieDetail({
     int movieId = 1,
   }) async {
     try {
@@ -40,11 +44,55 @@ class MoviewRepositoryImpl extends MovieRepository {
   }
 
   @override
-  Future<Either<String, MovieSuggestionResModelData>> getMovieSuggestion({
+  Future<Either<String, List<MovieSuggestionResults>>> getMovieSuggestion({
     int movieId = 1,
+    int pageNumber = 1,
   }) async {
     try {
-      final response = await service.getMovieSuggestion(movieId: movieId);
+      final response = await service.getMovieSuggestion(
+        movieId: movieId,
+        pageNumber: pageNumber,
+      );
+      return Right(response);
+    } catch (e) {
+      return Left(e.toString());
+    }
+  }
+
+  @override
+  Future<Either<String, List<PopularMoviesData>>> getPopularMovies({int pageNumber = 1}) async {
+    try {
+      final response = await service.getPopularMovie(pageNumber);
+      return Right(response);
+    } catch (e) {
+      return Left(e.toString());
+    }
+  }
+
+  @override
+  Future<Either<String, UpcomingMoviesModel>> getUpcomingMovies({int pageNumber = 1}) async {
+    try {
+      final response = await service.getUpcomingMovies(pageNumber);
+      return Right(response);
+    } catch (e) {
+      return Left(e.toString());
+    }
+  }
+
+  @override
+  Future<Either<String, NowPlayMoviesModel>> getNowPlayingMovies({int pageNumber = 1}) async {
+    try {
+      final response = await service.getPlayingNowMovies(pageNumber);
+      return Right(response);
+    } catch (e) {
+      return Left(e.toString());
+    }
+  }
+
+  @override
+  Future<Either<String, VideoModel>> getVideoInfo({int movieId = 1}) async {
+    try {
+      final response = await service.getVideoInfo(movieId: movieId);
       return Right(response);
     } catch (e) {
       return Left(e.toString());

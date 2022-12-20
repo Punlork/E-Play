@@ -1,14 +1,9 @@
 import 'dart:developer';
 
-import 'package:e_book_app/common/app_data.dart';
-import 'package:e_book_app/modules/component/index.dart';
-import 'package:e_book_app/modules/home/application/movie_detail/movie_detail_bloc.dart';
-import 'package:e_book_app/modules/home/application/movie_suggestion/movie_suggestion_bloc.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+import 'package:e_book_app/index.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class HomeDetailPage extends StatefulWidget {
   const HomeDetailPage({super.key, required this.movieId});
@@ -32,246 +27,384 @@ class HomeDetailPage extends StatefulWidget {
 
 class _HomeDetailPageState extends State<HomeDetailPage> {
   int movieIndex = 0;
-
-  Future<void> _lanuchUrl(String ytTrailerCode) async {
-    final uri = Uri.parse('${AppData.ytTrailerCode}$ytTrailerCode');
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    } else {
-      throw 'Cannot lanuch';
-    }
-  }
+  String _title = '';
+  String videoId = '';
+  late ScrollController _scrollController;
+  late YoutubePlayerController _youtubePlayerController;
+  late GlobalKey _widgetKey;
+  bool _showTitle = false;
 
   @override
   void initState() {
     super.initState();
     log(widget.movieId);
+
+    _scrollController = ScrollController();
+    _youtubePlayerController = YoutubePlayerController(
+      initialVideoId: _title,
+      flags: const YoutubePlayerFlags(
+        mute: true,
+      ),
+    );
+    _scrollController.addListener(() {
+      if (_scrollController.offset > 100) {
+        _showTitle = true;
+        setState(() {});
+      } else {
+        _showTitle = false;
+        setState(() {});
+      }
+    });
+    _widgetKey = GlobalKey();
+    _onInit();
+  }
+
+  void _onInit() {
     BlocProvider.of<MovieDetailBloc>(context).add(
-      OnGetMovieDetail(movieId: int.parse(widget.movieId)),
+      OnGetMovieDetail(int.parse(widget.movieId)),
     );
     BlocProvider.of<MovieSuggestionBloc>(context).add(
       OnGetMovieSuggestion(int.parse(widget.movieId)),
     );
   }
 
+  String _getTimeString(int value) {
+    final hour = value ~/ 60;
+    final minutes = value % 60;
+    return '${hour.toString().padLeft(1, "0")}h:${minutes.toString().padLeft(2, "0")}m';
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        elevation: 0,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            CustomIconWidget(
-              icon: Icons.arrow_back,
-              onPressed: () => GoRouter.of(context).pop(),
-            ),
-            Row(
-              children: [
-                CustomIconWidget(
-                  icon: Icons.favorite_border,
-                  onPressed: () {},
-                ),
-                CustomIconWidget(
-                  icon: Icons.ios_share,
-                  onPressed: () {},
-                ),
-              ],
-            ),
-          ],
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<MovieDetailBloc, MovieDetailState>(
+          listener: (context, state) {
+            if (state is MovieDetailLoaded) {
+              if (state.movieDetail.isEmpty) {
+                GoRouter.of(context).goNamed(
+                  HomePage.routeName,
+                );
+              } else {
+                _title = state.movieDetail.last.title;
+              }
+              BlocProvider.of<GetVideoInfoBloc>(context).add(
+                OnGetVideoInfo(state.movieDetail.last.id),
+              );
+            }
+          },
         ),
-      ),
-      body: BlocBuilder<MovieDetailBloc, MovieDetailState>(
-        builder: (context, state) {
-          if (state is MovieDetailLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (state is MovieDetailLoaded) {
-            final stateMovie = state.movieDetail.movie;
-            return SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  AppPadding(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Flexible(
-                          child: Image.network(
-                            stateMovie.mediumCoverImage,
-                            height: 250,
-                            width: 150,
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Flexible(
-                          child: Column(
-                            children: [
-                              Column(
+        BlocListener<GetVideoInfoBloc, GetVideoInfoState>(
+          listener: (context, state) {
+            if (state is GetVideoInfoLoaded) {
+              videoId = state.videoInfo.first.key;
+              setState(() {});
+            }
+          },
+        ),
+      ],
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          elevation: 0,
+          titleSpacing: 0,
+          title: Row(
+            children: [
+              BlocSelector<MovieDetailBloc, MovieDetailState, MovieDetailLoaded?>(
+                selector: (state) {
+                  if (state is MovieDetailLoaded) {
+                    return state;
+                  }
+                  return null;
+                },
+                builder: (context, state) {
+                  return CustomIconWidget(
+                    icon: Icons.arrow_back,
+                    onPressed: () {
+                      SystemChrome.setPreferredOrientations(
+                        DeviceOrientation.values,
+                      );
+                      if (state != null) {
+                        if (state.movieDetail.isNotEmpty) {
+                          GoRouter.of(context).pop();
+                        }
+                        BlocProvider.of<MovieDetailBloc>(context).add(
+                          const OnRemoveMovieDetail(),
+                        );
+                      } else {
+                        GoRouter.of(context).pop();
+                      }
+                    },
+                  );
+                },
+              ),
+              Expanded(
+                child: AnimatedOpacity(
+                  opacity: _showTitle ? 1 : 0,
+                  duration: const Duration(milliseconds: 500),
+                  child: Align(
+                    child: Text(
+                      _title,
+                      style: Theme.of(context).textTheme.titleSmall,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ),
+              ),
+              Row(
+                children: [
+                  CustomIconWidget(
+                    icon: Icons.favorite_border,
+                    onPressed: () {},
+                  ),
+                  CustomIconWidget(
+                    icon: Icons.ios_share,
+                    onPressed: () {},
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        body: Column(
+          children: <Widget>[
+            BlocBuilder<GetVideoInfoBloc, GetVideoInfoState>(
+              builder: (context, state) {
+                if (state is GetVideoInfoFailed) {
+                  return Text(state.message);
+                }
+                if (state is GetVideoInfoLoading) {
+                  return const CircularProgressIndicator();
+                }
+                if (state is GetVideoInfoLoaded) {
+                  final videoID = state.videoInfo.where((element) {
+                    return element.official == true;
+                  });
+                  print(videoID.last.key);
+                  return AppPadding(
+                    child: AspectRatio(
+                      aspectRatio: 16 / 9,
+                      child: YoutubePlayer(
+                        controller: _youtubePlayerController,
+                        showVideoProgressIndicator: true,
+                        onReady: () {
+                          _youtubePlayerController.load(videoID.last.key);
+                        },
+                      ),
+                    ),
+                  );
+                }
+                return const Text(AppData.somethingWentWrong);
+              },
+            ),
+            const SizedBox(height: 10),
+            BlocBuilder<MovieDetailBloc, MovieDetailState>(
+              builder: (context, state) {
+                if (state is MovieDetailLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (state is MovieDetailLoaded) {
+                  if (state.movieDetail.isNotEmpty) {
+                    final stateMovie = state.movieDetail.last;
+                    final runtime = _getTimeString(stateMovie.runtime);
+                    return Expanded(
+                      child: SingleChildScrollView(
+                        controller: _scrollController,
+                        child: Column(
+                          children: <Widget>[
+                            AppPadding(
+                              child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Text(
-                                    stateMovie.titleEnglish,
-                                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                          // letterSpacing: 3,
-                                          height: 1.5,
-                                        ),
-                                  ),
-                                  const SizedBox(height: 20),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      _CustomMovieDetailStatus(
-                                        icon: Icons.download,
-                                        title: NumberFormat.compact().format(
-                                          int.parse(
-                                            stateMovie.downloadCount.toString(),
+                                  Flexible(
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(6),
+                                      child: Banner(
+                                        message: '${stateMovie.voteAverage}',
+                                        location: BannerLocation.topEnd,
+                                        child: Image.network(
+                                          AppData.imagePath(
+                                            posterPath: stateMovie.posterPath,
                                           ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 20,
-                                        child: VerticalDivider(
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      _CustomMovieDetailStatus(
-                                        icon: Icons.thumb_up_outlined,
-                                        title: stateMovie.likeCount.toString(),
-                                      ),
-                                      const SizedBox(
-                                        height: 20,
-                                        child: VerticalDivider(
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      _CustomMovieDetailStatus(
-                                        icon: Icons.today,
-                                        title: stateMovie.year.toString(),
-                                      )
-                                    ],
-                                  ),
-                                  const SizedBox(height: 20),
-                                  if (stateMovie.genres != null)
-                                    Wrap(
-                                      spacing: 10,
-                                      runSpacing: 10,
-                                      children: List.generate(
-                                        stateMovie.genres!.length,
-                                        (indexGenre) => GenreDescription(
-                                          title: stateMovie.genres![indexGenre],
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
                                     ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Flexible(
+                                    child: Column(
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            Text(
+                                              stateMovie.title,
+                                              style:
+                                                  Theme.of(context).textTheme.titleSmall?.copyWith(
+                                                        letterSpacing: 2,
+                                                        height: 1.5,
+                                                      ),
+                                              key: _widgetKey,
+                                            ),
+                                            const SizedBox(height: 20),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                _CustomMovieDetailStatus(
+                                                  icon: Icons.thumb_up_outlined,
+                                                  title: NumberFormat.compact()
+                                                      .format(stateMovie.popularity),
+                                                ),
+                                                _CustomMovieDetailStatus(
+                                                  icon: Icons.timelapse_outlined,
+                                                  title: runtime,
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 10),
+                                            _CustomMovieDetailStatus(
+                                              icon: Icons.today,
+                                              title: stateMovie.releaseDate.split('-').first,
+                                            ),
+                                            const SizedBox(height: 20),
+                                            if (stateMovie.genres != null)
+                                              Wrap(
+                                                spacing: 10,
+                                                runSpacing: 10,
+                                                children: List.generate(
+                                                  stateMovie.genres.length,
+                                                  (indexGenre) => GenreDescription(
+                                                    title: stateMovie.genres[indexGenre].name,
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 20),
+                                        TextButton(
+                                          onPressed: () {},
+                                          child: Text(
+                                            'Movie Trailer',
+                                            style: Theme.of(context).textTheme.button,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  )
                                 ],
                               ),
-                              const SizedBox(height: 20),
-                              TextButton(
-                                onPressed: () => {
-                                  if (stateMovie.ytTrailerCode == '')
-                                    throw 'Not Yet Available'
-                                  else
-                                    {
-                                      log("code: ${stateMovie.ytTrailerCode}"),
-                                      _lanuchUrl(stateMovie.ytTrailerCode),
-                                    }
-                                },
-                                child: Text(
-                                  'Movie Trailer',
-                                  style: Theme.of(context).textTheme.button,
-                                ),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  AppPadding(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          'Movie Description',
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                        ),
-                        const Divider(),
-                        _BookDescription(stateMovie.descriptionFull),
-                        BlocBuilder<MovieSuggestionBloc, MovieSuggestionState>(
-                          builder: (context, state) {
-                            if (state is MovieSuggestionLoading) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-                            if (state is MovieSuggestionFailed) {
-                              return Center(child: Text(state.message));
-                            }
-                            if (state is MovieSuggestionLoaded) {
-                              return Column(
+                            ),
+                            const SizedBox(height: 20),
+                            AppPadding(
+                              child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
                                   Text(
-                                    'Movie Suggestion',
-                                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    'Movie Description',
+                                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                           color: Theme.of(context).colorScheme.primary,
                                         ),
                                   ),
                                   const Divider(),
-                                  const SizedBox(height: 10),
-                                  ...List.generate(
-                                    state.movieSuggestion.movieCount,
-                                    (index) {
-                                      final movie = state.movieSuggestion.movies[index];
-                                      return Container(
-                                        margin: const EdgeInsets.symmetric(
-                                          vertical: 10,
-                                        ),
-                                        child: GestureDetector(
-                                          onTap: () => GoRouter.of(context).pushNamed(
-                                            HomeDetailPage.routeName,
-                                            queryParams: {
-                                              'movie_id': movie.id.toString(),
-                                            },
-                                          ),
-                                          child: BookItemCard(
-                                            description: movie.synopsis,
-                                            imgurl: movie.mediumCoverImage,
-                                            producer: movie.rating.toString(),
-                                            title: movie.titleEnglish,
-                                          ),
-                                        ),
+                                  _BookDescription(
+                                    stateMovie.overview,
+                                  ),
+                                  BlocBuilder<MovieSuggestionBloc, MovieSuggestionState>(
+                                    builder: (context, state) {
+                                      if (state is MovieSuggestionLoading) {
+                                        return const Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      }
+                                      if (state is MovieSuggestionFailed) {
+                                        return Center(child: Text(state.message));
+                                      }
+                                      if (state is MovieSuggestionLoaded) {
+                                        // log(state.movieSuggestion.length.toString());
+                                        return Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Movie Suggestion',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleMedium
+                                                  ?.copyWith(
+                                                    color: Theme.of(context).colorScheme.primary,
+                                                  ),
+                                            ),
+                                            const SizedBox(height: 10),
+                                            const Divider(thickness: 2),
+                                            const SizedBox(height: 10),
+                                            if (state.movieSuggestion.isNotEmpty)
+                                              ...List.generate(
+                                                state.movieSuggestion.length,
+                                                (index) {
+                                                  final movie = state.movieSuggestion[index];
+                                                  return Container(
+                                                    margin: const EdgeInsets.symmetric(
+                                                      vertical: 10,
+                                                    ),
+                                                    height: 150,
+                                                    child: GestureDetector(
+                                                      onTap: () => GoRouter.of(context).pushNamed(
+                                                        HomeDetailPage.routeName,
+                                                        queryParams: {
+                                                          'movie_id': movie.id.toString(),
+                                                        },
+                                                      ),
+                                                      child: BookItemCard(
+                                                        description: movie.overview,
+                                                        isRRated: movie.adult,
+                                                        imgUrl: movie.posterPath ??
+                                                            movie.backdropPath ??
+                                                            '',
+                                                        producer: movie.voteAverage.toString(),
+                                                        title: movie.title,
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              )
+                                            else
+                                              Center(
+                                                child: Text(
+                                                  'No Movie Suggestion',
+                                                  style: Theme.of(context).textTheme.labelMedium,
+                                                ),
+                                              )
+                                          ],
+                                        );
+                                      }
+                                      return const Center(
+                                        child: Text('Something went worng'),
                                       );
                                     },
-                                  ),
+                                  )
                                 ],
-                              );
-                            }
-                            return const Center(
-                              child: Text('Something went worng'),
-                            );
-                          },
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }
-          if (state is MovieDetailFailed) {
-            return Text(state.message);
-          }
-          return const Center(
-            child: Text('Something Went Worng'),
-          );
-        },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+                }
+                if (state is MovieDetailFailed) {
+                  return Center(
+                    child: Text(state.message),
+                  );
+                }
+                return const Center(
+                  child: Text('Something Went Wrong'),
+                );
+              },
+            )
+          ],
+        ),
       ),
     );
   }
@@ -297,7 +430,7 @@ class _CustomMovieDetailStatus extends StatelessWidget {
         const SizedBox(width: 5),
         Text(
           title,
-          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: Colors.grey,
               ),
         ),
@@ -327,8 +460,7 @@ class _BookDescriptionState extends State<_BookDescription> {
         children: [
           Text(
             widget._description,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  letterSpacing: 2,
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(
                   height: 2,
                   color: Colors.grey,
                 ),

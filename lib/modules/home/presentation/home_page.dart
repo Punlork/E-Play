@@ -1,11 +1,6 @@
 import 'dart:developer';
 
-import 'package:e_book_app/modules/component/index.dart';
-import 'package:e_book_app/modules/home/application/movie/movie_bloc.dart';
-import 'package:e_book_app/modules/home/presentation/home_detail_page.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+import 'package:e_book_app/index.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -30,28 +25,37 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late final ScrollController _controller;
-  // late MovieLoaded loadedSatate;
-  int pageNumber = 2;
+  int pageNumber = 1;
   @override
   void initState() {
     super.initState();
     _controller = ScrollController();
     _controller.addListener(
       () {
-        if (_controller.offset == _controller.position.maxScrollExtent) {
-          print('Offset: ${_controller.offset}');
-          print('Position: ${_controller.position.maxScrollExtent}');
-          BlocProvider.of<MovieBloc>(context).add(
-            OnGetMoviesNextPage(pageNumber: pageNumber++),
-          );
-        }
+        // if (_controller.offset == _controller.position.maxScrollExtent) {
+        //   print('Offset: ${_controller.offset}');
+        //   print('Position: ${_controller.position.maxScrollExtent}');
+        //   BlocProvider.of<MovieBloc>(context).add(
+        //     OnGetMoviesNextPage(pageNumber: pageNumber++),
+        //   );
+        // }
       },
     );
     onGetMovies();
   }
 
   void onGetMovies() {
-    BlocProvider.of<MovieBloc>(context).add(OnGetMovies());
+    // BlocProvider.of<MovieBloc>(context).add(OnGetMovies());
+    BlocProvider.of<PopularMoviesBloc>(context).add(OnGetPopularMovies());
+    BlocProvider.of<UpcomingMoviesBloc>(context).add(
+      const OnGetUpcomingMovies(1),
+    );
+    BlocProvider.of<NowPlayingMoviesBloc>(context).add(
+      const OnGetNowPlayingMovies(1),
+    );
+    BlocProvider.of<PopularTvShowsBloc>(context).add(
+      const OnGetPopularTvShow(1),
+    );
   }
 
   @override
@@ -64,143 +68,138 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           title: Text(
             'Movie App',
-            style: Theme.of(context).textTheme.headline6?.copyWith(
-                  letterSpacing: 5,
-                  // wordSpacing: 5,
-                  fontWeight: FontWeight.bold,
-                ),
+            style: Theme.of(context).textTheme.headlineLarge,
           ),
           centerTitle: true,
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           elevation: 0,
         ),
-        body: BlocBuilder<MovieBloc, MovieState>(
-          builder: (context, state) {
-            if (state is MovieLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            if (state is MovieLoaded) {
-              // if (state.status == MovieStatus.ended) {
-              //   Text(
-              //     'Ended',
-              //     style: Theme.of(context).textTheme.titleMedium,
-              //   );
-              // }
-              if (state.status == MovieStatus.loading) const CircularProgressIndicator();
-              return SingleChildScrollView(
-                // physics: const NeverScrollableScrollPhysics(),
-                controller: _controller,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    SizedBox.fromSize(
-                      size: const Size.fromHeight(150),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: ListView.builder(
-                              itemBuilder: (context, index) => ImageCardWidget(
-                                imgurl: state.movie![index].mediumCoverImage,
-                              ),
-                              padding: const EdgeInsets.symmetric(horizontal: 16),
-                              itemCount: state.movie!.length,
-                              scrollDirection: Axis.horizontal,
-                              shrinkWrap: true,
-                              // controller: _controller,
-                            ),
-                          ),
-                          if (state.status == MovieStatus.loading)
-                            const CircularProgressIndicator(),
-                          if (state.status == MovieStatus.ended)
-                            Text(
-                              'Ended',
-                              style: Theme.of(context).textTheme.titleMedium,
-                            )
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    AppPadding(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'All Movie',
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
-                          TextButton(
-                            onPressed: () {},
-                            child: Text(
-                              'See All',
-                              style: Theme.of(context).textTheme.button?.copyWith(
-                                    color: Theme.of(context).colorScheme.primary,
-                                  ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Flexible(
-                      child: ListView.builder(
-                        itemBuilder: (context, index) => Container(
-                          margin: const EdgeInsets.symmetric(vertical: 10),
-                          child: AppPadding(
-                            child: GestureDetector(
-                              onTap: () => {
-                                GoRouter.of(context).pushNamed(
-                                  HomeDetailPage.routeName,
-                                  queryParams: {
-                                    'movie_id': state.movie![index].id.toString(),
-                                  },
-                                ),
-                              },
-                              child: BookItemCard(
-                                description: state.movie![index].synopsis,
-                                imgurl: state.movie![index].largeCoverImage,
-                                producer: state.movie![index].rating.toString(),
-                                title: state.movie![index].titleEnglish,
-                              ),
-                            ),
-                          ),
-                        ),
-                        itemCount: state.movie!.length,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                      ),
-                    ),
-                    // Column(
-                    //   children: List.generate(
-                    //     10,
-                    //     (index) => Container(
-                    //       margin: const EdgeInsets.symmetric(vertical: 10),
-                    //       child: AppPadding(
-                    //         child: GestureDetector(
-                    //           onTap: () => GoRouter.of(context).pushNamed(
-                    //             HomeDetailPage.routeName,
-                    //           ),
-                    //           child: const BookItemCard(),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
-                  ],
+        body: SingleChildScrollView(
+          controller: _controller,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              AppPadding(
+                child: Text(
+                  'Upcoming Movies',
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
-              );
-            }
-            if (state is MovieFailed) {
-              return Center(
-                child: Text(state.message),
-              );
-            }
-            return const Center(
-              child: Text('Something went worng'),
-            );
-          },
+              ),
+              const SizedBox(height: 10),
+              BlocBuilder<UpcomingMoviesBloc, UpcomingMoviesState>(
+                builder: (context, state) {
+                  if (state is UpcomingMoviesLoading) {
+                    return const CircularProgressIndicator();
+                  }
+                  if (state is UpcomingMoviesLoaded) {
+                    final upcomingMovie = state.upComingMovies;
+                    return SizedBox.fromSize(
+                      size: const Size.fromHeight(250),
+                      child: ListView.builder(
+                        itemBuilder: (context, index) => MoviesTvShowCardBox(
+                          id: upcomingMovie[index].id.toString(),
+                          imgUrl: upcomingMovie[index].posterPath,
+                          title: upcomingMovie[index].title,
+                          rating: upcomingMovie[index].voteAverage,
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        itemCount: upcomingMovie.length,
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        // controller: _controller,
+                      ),
+                    );
+                  }
+                  if (state is UpcomingMoviesFailed) {
+                    return const Text('Failed to get Movie');
+                  }
+                  return const Text(
+                    AppData.somethingWentWrong,
+                  );
+                },
+              ),
+              AppPadding(
+                child: Text(
+                  'In Theater',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ),
+              const SizedBox(height: 10),
+              BlocBuilder<NowPlayingMoviesBloc, NowPlayingMoviesState>(
+                builder: (context, state) {
+                  if (state is NowPlayingMoviesLoading) {
+                    return const CircularProgressIndicator();
+                  }
+                  if (state is NowPlayingMoviesFailed) {
+                    return Text(state.message);
+                  }
+                  if (state is NowPlayingMoviesLoaded) {
+                    final nowPlaying = state.nowPlayingMovies;
+
+                    return SizedBox.fromSize(
+                      size: const Size.fromHeight(250),
+                      child: ListView.builder(
+                        itemBuilder: (context, index) => MoviesTvShowCardBox(
+                          id: nowPlaying[index].id.toString(),
+                          imgUrl: nowPlaying[index].posterPath,
+                          title: nowPlaying[index].title,
+                          rating: nowPlaying[index].voteAverage,
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        itemCount: nowPlaying.length,
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        // controller: _controller,
+                      ),
+                    );
+                  }
+
+                  return const Text(
+                    AppData.somethingWentWrong,
+                  );
+                },
+              ),
+              AppPadding(
+                child: Text(
+                  'Popular Movies',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ),
+              const SizedBox(height: 20),
+              BlocBuilder<PopularMoviesBloc, PopularMoviesState>(
+                builder: (context, state) {
+                  if (state is PopularMoviesLoading) {
+                    return const CircularProgressIndicator();
+                  }
+                  if (state is PopularMoviesFailure) {
+                    return Text(state.message);
+                  }
+                  if (state is PopularMoviesLoaded) {
+                    return SizedBox.fromSize(
+                      size: const Size.fromHeight(250),
+                      child: ListView.builder(
+                        itemBuilder: (context, index) => MoviesTvShowCardBox(
+                          id: state.popularMovies[index].id.toString(),
+                          imgUrl: state.popularMovies[index].posterPath,
+                          title: state.popularMovies[index].title,
+                          rating: state.popularMovies[index].voteAverage,
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        itemCount: state.popularMovies.length,
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        // controller: _controller,
+                      ),
+                    );
+                  } else {
+                    return const Text('Something went wrong');
+                  }
+                },
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );

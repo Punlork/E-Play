@@ -27,7 +27,7 @@ class _SettingsPageState extends State<SettingsPage> {
     SettingsModel(name: 'Liences', icon: Icons.description),
   ];
 
-  bool _isEnable = false;
+  final bool _isEnable = false;
 
   @override
   Widget build(BuildContext context) {

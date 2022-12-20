@@ -1,18 +1,20 @@
-import 'package:e_book_app/modules/home/application/movie/movie_bloc.dart';
-import 'package:e_book_app/modules/home/application/movie_detail/movie_detail_bloc.dart';
-import 'package:e_book_app/modules/home/application/movie_suggestion/movie_suggestion_bloc.dart';
-import 'package:e_book_app/modules/home/infrastructure/movie_repository.dart';
-import 'package:e_book_app/modules/home/infrastructure/movie_service.dart';
-
-import '../../dependencies_injection.dart';
+import 'package:e_book_app/index.dart';
 
 void movieServiceLocator() {
   getIt
     ..registerLazySingleton<MovieService>(() => MovieService(getIt()))
     ..registerLazySingleton<MovieRepository>(
-      () => MoviewRepositoryImpl(getIt()),
+      () => MoviesRepositoryImpl(getIt()),
     )
-    ..registerFactory<MovieBloc>(() => MovieBloc(getIt()))
+    ..registerLazySingleton<TVShowsService>(() => TVShowsService(getIt()))
+    ..registerLazySingleton<TvShowsRepository>(
+      () => TvShowsRepositoryImpl(getIt()),
+    )
     ..registerFactory<MovieDetailBloc>(() => MovieDetailBloc(getIt()))
-    ..registerFactory<MovieSuggestionBloc>(() => MovieSuggestionBloc(getIt()));
+    ..registerFactory<MovieSuggestionBloc>(() => MovieSuggestionBloc(getIt()))
+    ..registerFactory<PopularMoviesBloc>(() => PopularMoviesBloc(getIt()))
+    ..registerFactory<UpcomingMoviesBloc>(() => UpcomingMoviesBloc(getIt()))
+    ..registerFactory<NowPlayingMoviesBloc>(() => NowPlayingMoviesBloc(getIt()))
+    ..registerFactory<PopularTvShowsBloc>(() => PopularTvShowsBloc(getIt()))
+    ..registerFactory<GetVideoInfoBloc>(() => GetVideoInfoBloc(getIt()));
 }

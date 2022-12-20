@@ -1,4 +1,4 @@
-part of 'movie_bloc.dart';
+part of 'movie_bloc.dart.txt';
 
 abstract class MovieEvent extends Equatable {
   const MovieEvent();

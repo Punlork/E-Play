@@ -5,8 +5,8 @@ class CustomIconWidget extends StatelessWidget {
     super.key,
     required this.icon,
     this.onPressed,
-    this.size = 22,
-    this.splashRadius = 22,
+    this.size = 20,
+    this.splashRadius = 20,
   });
 
   final IconData icon;

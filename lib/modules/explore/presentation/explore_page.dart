@@ -1,5 +1,4 @@
 import 'package:e_book_app/modules/component/app_padding.dart';
-import 'package:e_book_app/modules/component/icon_widget.dart';
 import 'package:e_book_app/modules/component/image_card.dart';
 import 'package:e_book_app/modules/explore/presentation/explore_detail_page.dart';
 import 'package:flutter/material.dart';
@@ -86,7 +85,10 @@ class _CustomExploreSection extends StatelessWidget {
             child: Row(
               children: List.generate(
                 20,
-                (index) => const ImageCardWidget(imgurl: '',),
+                (index) => const ImageCardWidget(
+                  imgUrl: '',
+                  rating: 0,
+                ),
               ),
             ),
           ),

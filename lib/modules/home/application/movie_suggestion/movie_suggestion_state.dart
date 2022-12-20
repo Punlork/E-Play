@@ -14,7 +14,7 @@ class MovieSuggestionLoading extends MovieSuggestionState {}
 class MovieSuggestionLoaded extends MovieSuggestionState {
   const MovieSuggestionLoaded(this.movieSuggestion);
 
-  final MovieSuggestionResModelData movieSuggestion;
+  final List<MovieSuggestionResults> movieSuggestion;
 }
 
 class MovieSuggestionFailed extends MovieSuggestionState {

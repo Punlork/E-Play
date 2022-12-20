@@ -1,34 +1,43 @@
+import 'package:e_book_app/common/app_data.dart';
 import 'package:flutter/material.dart';
 
 class BookItemCard extends StatelessWidget {
   const BookItemCard({
     super.key,
-    required this.imgurl,
+    required this.imgUrl,
     required this.title,
     required this.producer,
     required this.description,
+    required this.isRRated,
   });
 
-  final String imgurl;
+  final String imgUrl;
   final String title;
   final String producer;
   final String description;
+  final bool isRRated;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        Container(
-          height: 150,
-          width: 100,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            image: DecorationImage(
-              image: NetworkImage(
-                imgurl,
-              ),
-              fit: BoxFit.fill,
-            ),
+        AspectRatio(
+          aspectRatio: 2 / 3,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(6),
+            child: isRRated
+                ? Banner(
+                    location: BannerLocation.topEnd,
+                    message: 'R-rated',
+                    child: Image.network(
+                      AppData.imagePath(posterPath: imgUrl),
+                      fit: BoxFit.fitHeight,
+                    ),
+                  )
+                : Image.network(
+                    AppData.imagePath(posterPath: imgUrl),
+                    fit: BoxFit.fitHeight,
+                  ),
           ),
         ),
         const SizedBox(width: 20),
@@ -39,7 +48,7 @@ class BookItemCard extends StatelessWidget {
             children: <Widget>[
               Text(
                 title,
-                style: Theme.of(context).textTheme.titleLarge,
+                style: Theme.of(context).textTheme.titleSmall,
               ),
               const SizedBox(height: 10),
               Row(
@@ -52,7 +61,7 @@ class BookItemCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 10),
                   Text(
-                    producer,
+                    producer.substring(0, 3),
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
                           color: Theme.of(context).colorScheme.primary,
                         ),
@@ -65,12 +74,15 @@ class BookItemCard extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 10),
-              Text(
-                description,
-                style: Theme.of(context).textTheme.bodyLarge,
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
+              Expanded(
+                child: Text(
+                  description,
+                  style: Theme.of(context).textTheme.bodySmall,
+                  maxLines: 5,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
+              // const Spacer()
             ],
           ),
         )

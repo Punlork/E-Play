@@ -12,20 +12,43 @@ class MovieDetailBloc extends Bloc<MovieDetailEvent, MovieDetailState> {
       : _repository = repository,
         super(MovieDetailInitial()) {
     on<OnGetMovieDetail>(_onGetMovieDetail);
+    on<OnRemoveMovieDetail>(_onRemoveMovieDetail);
+    // on<>
   }
 
   final MovieRepository _repository;
+  final List<MovieDetailResModel> _listMovie = [];
+  final List<int> _movieIndexes = [];
 
   Future<FutureOr<void>> _onGetMovieDetail(
     OnGetMovieDetail event,
     Emitter<MovieDetailState> emit,
   ) async {
-    final movie = <MovieDetailResModelData>[];
     emit(MovieDetailLoading());
-    final result = await _repository.getMovieDetail(movieId: event.movieId ?? 1);
+    _movieIndexes.add(event.id);
+    final result = await _repository.getMovieDetail(
+      movieId: _movieIndexes.last,
+    );
     result.fold(
       (l) => emit(MovieDetailFailed(l)),
-      (r) => {emit(MovieDetailLoaded(r))},
+      (r) => {
+        _listMovie.add(r),
+        emit(MovieDetailLoaded(_listMovie)),
+      },
     );
+  }
+
+  FutureOr<void> _onRemoveMovieDetail(
+    OnRemoveMovieDetail event,
+    Emitter<MovieDetailState> emit,
+  ) {
+    emit(MovieDetailLoading());
+    try {
+      _movieIndexes.removeLast();
+      _listMovie.removeLast();
+      emit(MovieDetailLoaded(_listMovie));
+    } catch (e) {
+      emit(MovieDetailFailed(e.toString()));
+    }
   }
 }

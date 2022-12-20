@@ -21,9 +21,11 @@ dependencies:
   font_awesome_flutter: ^10.2.1
   get_it: ^7.2.0
   go_router: ^5.1.1
+  google_fonts: ^3.0.1
   intl: ^0.17.0
   shared_preferences: ^2.0.15
   url_launcher: ^6.1.6
+  youtube_player_flutter: ^8.1.1
 
 dev_dependencies:
   bloc_test: ^9.1.0

@@ -37,7 +37,7 @@ class _MainPageState extends State<MainPage> {
   bool get isBacktoTop => _isBacktoTop;
 
   static final List<Widget> _pages = [
-    HomePage(),
+    const HomePage(),
     const ExplorePage(),
     const SettingsPage(),
   ];

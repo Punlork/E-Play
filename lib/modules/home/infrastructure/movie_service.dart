@@ -1,15 +1,18 @@
-import 'dart:developer';
-
-import 'package:dio/dio.dart';
-import 'package:e_book_app/common/app_data.dart';
-import 'package:e_book_app/modules/home/domain/movie_detail_model.dart';
-import 'package:e_book_app/modules/home/domain/movie_model.dart';
-import 'package:e_book_app/modules/home/domain/movie_suggestion_model.dart';
+import 'package:e_book_app/index.dart';
 
 class MovieService {
   MovieService(this.service);
 
   final Dio service;
+
+  Future<VideoModel> getVideoInfo({required int movieId}) async {
+    final response = await service.get<dynamic>(
+      AppData.getVideoInfo(
+        movieId: movieId,
+      ),
+    );
+    return VideoModel.fromJson(response.data);
+  }
 
   Future<MovieResModelData> getMovieList({required int pageNumber}) async {
     final response = await service.get<dynamic>(
@@ -20,19 +23,48 @@ class MovieService {
     return movie.data;
   }
 
-  Future<MovieDetailResModelData> getMovieDetail({required int movieId}) async {
-    final response = await service.get<dynamic>(
-      '${AppData.movieDetail}?movie_id=$movieId',
-    );
+  Future<MovieDetailResModel> getMovieDetail({required int movieId}) async {
+    final response = await service.get<dynamic>(AppData.getMovieDetail(movieId.toString()));
     final movie = MovieDetailResModel.fromJson(response.data);
-    return movie.data;
+    return movie;
   }
 
-  Future<MovieSuggestionResModelData> getMovieSuggestion({required int movieId}) async {
+  Future<List<MovieSuggestionResults>> getMovieSuggestion({
+    required int movieId,
+    required int pageNumber,
+  }) async {
     final response = await service.get<dynamic>(
-      '${AppData.suggestionMovie}?movie_id=$movieId',
+      AppData.getMovieSuggestion(
+        movieId: movieId.toString(),
+        pageNumber: pageNumber.toString(),
+      ),
     );
-    final movie = MovieSuggestionResModel.fromJson(response.data);
-    return movie.data;
+    final movie = MovieSuggestion.fromJson(response.data);
+    return movie.results;
+  }
+
+  Future<List<PopularMoviesData>> getPopularMovie(int pageNumber) async {
+    final response = await service.get<dynamic>(AppData.popular(pageNumber.toString()));
+    final movies = PopularMovies.fromJson(response.data);
+    return movies.results;
+  }
+
+  Future<UpcomingMoviesModel> getUpcomingMovies(int pageNumber) async {
+    final response = await service.get<dynamic>(
+      AppData.getUpcomingMovies(
+        pageNumber: pageNumber.toString(),
+      ),
+    );
+    return UpcomingMoviesModel.fromJson(response.data);
+  }
+
+  Future<NowPlayMoviesModel> getPlayingNowMovies(int pageNumber) async {
+    final response = await service.get<dynamic>(
+      AppData.getNowPlayingMovies(
+        pageNumber: pageNumber.toString(),
+      ),
+    );
+    // log(response.data);
+    return NowPlayMoviesModel.fromJson(response.data);
   }
 }
