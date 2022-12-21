@@ -1,4 +1,5 @@
 import 'package:e_book_app/index.dart';
+import 'package:e_book_app/modules/home/domain/trending_model.dart';
 
 class MovieService {
   MovieService(this.service);
@@ -64,7 +65,13 @@ class MovieService {
         pageNumber: pageNumber.toString(),
       ),
     );
-    // log(response.data);
     return NowPlayMoviesModel.fromJson(response.data);
+  }
+
+  Future<TrendingModel> getTrendingMovies(String mediaType) async {
+    final response = await service.get<dynamic>(
+      AppData.getTrending(mediaType: mediaType),
+    );
+    return TrendingModel.fromJson(response.data);
   }
 }

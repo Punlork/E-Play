@@ -16,5 +16,6 @@ void movieServiceLocator() {
     ..registerFactory<UpcomingMoviesBloc>(() => UpcomingMoviesBloc(getIt()))
     ..registerFactory<NowPlayingMoviesBloc>(() => NowPlayingMoviesBloc(getIt()))
     ..registerFactory<PopularTvShowsBloc>(() => PopularTvShowsBloc(getIt()))
-    ..registerFactory<GetVideoInfoBloc>(() => GetVideoInfoBloc(getIt()));
+    ..registerFactory<GetVideoInfoBloc>(() => GetVideoInfoBloc(getIt()))
+    ..registerFactory<GetTrendingBloc>(() => GetTrendingBloc(getIt()));
 }

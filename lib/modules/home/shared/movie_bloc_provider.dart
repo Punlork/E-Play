@@ -25,4 +25,7 @@ List<BlocProvider> movieBlocProvider = [
   BlocProvider<GetVideoInfoBloc>(
     create: (context) => getIt<GetVideoInfoBloc>(),
   ),
+  BlocProvider<GetTrendingBloc>(
+    create: (context) => getIt<GetTrendingBloc>(),
+  ),
 ];

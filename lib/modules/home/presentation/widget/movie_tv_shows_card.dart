@@ -29,7 +29,8 @@ class MoviesTvShowCardBox extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Flexible(
+            SizedBox.fromSize(
+              size: const Size.fromHeight(200),
               child: ImageCardWidget(
                 imgUrl: imgUrl,
                 rating: rating,

@@ -37,7 +37,7 @@ class _SettingsPageState extends State<SettingsPage> {
         elevation: 0,
         title: Text(
           'Settings',
-          style: Theme.of(context).textTheme.headline6,
+          style: Theme.of(context).textTheme.headlineLarge,
         ),
         centerTitle: true,
       ),

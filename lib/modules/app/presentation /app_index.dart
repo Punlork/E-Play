@@ -77,6 +77,12 @@ class _AppIndex extends StatelessWidget {
         fontWeight: FontWeight.bold,
         letterSpacing: 3,
       ),
+      titleMedium: GoogleFonts.ptSerifCaption(
+        color: AppColors.white,
+        fontSize: 10,
+        fontWeight: FontWeight.bold,
+        letterSpacing: 3,
+      ),
       labelMedium: GoogleFonts.notoSans(
         fontWeight: FontWeight.bold,
         fontSize: 10,

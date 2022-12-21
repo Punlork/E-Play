@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:e_book_app/index.dart';
-import 'package:e_book_app/modules/home/infrastructure/tv_shows_service.dart';
 
 abstract class TvShowsRepository {
   Future<Either<String, PopularTVShowModel>> getPopularTvShows({int pageNumber});

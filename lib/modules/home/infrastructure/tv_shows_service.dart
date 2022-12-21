@@ -9,6 +9,6 @@ class TVShowsService {
     final response = await _dio.get<dynamic>(
       AppData.getTVPopularMovies(pageNumber: pageNumber),
     );
-    return response.data;
+    return PopularTVShowModel.fromJson(response.data);
   }
 }

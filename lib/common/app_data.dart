@@ -6,6 +6,7 @@ class AppData {
   static const String apiKey = '022cb7dedba411c017779a0bbf531c69';
   static const String mainUrl = 'https://api.themoviedb.org/3/movie';
   static const String mainUrlTV = 'https://api.themoviedb.org/3/tv';
+  static const String mainUrlTrending = 'https://api.themoviedb.org/3/trending';
   static const String suggestionMovie = '$mainUrl/movie_suggestions.json';
   static const String listMovie = '$mainUrl/list_movies.json';
   static const String movieDetail = '$mainUrl/movie_details.json';
@@ -19,6 +20,9 @@ class AppData {
 
   static dynamic popular(String pageNumber) =>
       '$mainUrl/popular?api_key=$apiKey&language=en-US&page=$pageNumber';
+
+  static dynamic getTrending({required String mediaType}) =>
+      '$mainUrlTrending/$mediaType/week?api_key=$apiKey';
 
   static String imagePath({required String posterPath}) =>
       'https://image.tmdb.org/t/p/w500$posterPath';

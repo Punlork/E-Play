@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:e_book_app/index.dart';
 
 class HomePage extends StatefulWidget {
@@ -30,17 +31,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _controller = ScrollController();
-    _controller.addListener(
-      () {
-        // if (_controller.offset == _controller.position.maxScrollExtent) {
-        //   print('Offset: ${_controller.offset}');
-        //   print('Position: ${_controller.position.maxScrollExtent}');
-        //   BlocProvider.of<MovieBloc>(context).add(
-        //     OnGetMoviesNextPage(pageNumber: pageNumber++),
-        //   );
-        // }
-      },
-    );
     onGetMovies();
   }
 
@@ -55,6 +45,9 @@ class _HomePageState extends State<HomePage> {
     );
     BlocProvider.of<PopularTvShowsBloc>(context).add(
       const OnGetPopularTvShow(1),
+    );
+    BlocProvider.of<GetTrendingBloc>(context).add(
+      const OnGetTrending('all'),
     );
   }
 
@@ -80,6 +73,66 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
+              BlocBuilder<GetTrendingBloc, GetTrendingState>(
+                builder: (context, state) {
+                  if (state is GetTrendingFailed) {
+                    return Text(state.message);
+                  }
+                  if (state is GetTrendingFailed) {
+                    return const CircularProgressIndicator();
+                  }
+                  if (state is GetTrendingLoaded) {
+                    final trending = state.trendingResult;
+                    return CarouselSlider.builder(
+                      itemCount: trending.length,
+                      itemBuilder: (context, index, realIndex) {
+                        return AppPadding(
+                          horizontal: 5,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6),
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: NetworkImage(
+                                  AppData.imagePath(
+                                    posterPath: trending[index].backdropPath!,
+                                  ),
+                                ),
+                                // fit: BoxFit.cover,
+                              ),
+                            ),
+                            alignment: Alignment.bottomCenter,
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 5,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.6),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              // alignment: Alignment.center,
+
+                              child: Text(
+                                trending[index].title ?? '',
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      options: CarouselOptions(
+                        autoPlay: true,
+                        viewportFraction: 0.9,
+                        aspectRatio: 1.8,
+                      ),
+                    );
+                  }
+                  return const Text(AppData.somethingWentWrong);
+                },
+              ),
+              const SizedBox(height: 10),
               AppPadding(
                 child: Text(
                   'Upcoming Movies',
@@ -155,9 +208,7 @@ class _HomePageState extends State<HomePage> {
                     );
                   }
 
-                  return const Text(
-                    AppData.somethingWentWrong,
-                  );
+                  return const Text(AppData.somethingWentWrong);
                 },
               ),
               AppPadding(
@@ -166,7 +217,7 @@ class _HomePageState extends State<HomePage> {
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               BlocBuilder<PopularMoviesBloc, PopularMoviesState>(
                 builder: (context, state) {
                   if (state is PopularMoviesLoading) {
@@ -197,7 +248,44 @@ class _HomePageState extends State<HomePage> {
                   }
                 },
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
+              AppPadding(
+                child: Text(
+                  'Popular Series',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ),
+              const SizedBox(height: 10),
+              BlocBuilder<PopularTvShowsBloc, PopularTvShowsState>(
+                builder: (context, state) {
+                  if (state is PopularTvShowsLoading) {
+                    return const CircularProgressIndicator();
+                  }
+                  if (state is PopularTvShowsFailed) {
+                    return Text(state.message);
+                  }
+                  if (state is PopularTvShowsLoaded) {
+                    final popularTvShows = state.popularTvShows;
+                    return SizedBox.fromSize(
+                      size: const Size.fromHeight(250),
+                      child: ListView.builder(
+                        itemBuilder: (context, index) => MoviesTvShowCardBox(
+                          id: popularTvShows[index].id.toString(),
+                          imgUrl: popularTvShows[index].posterPath,
+                          title: popularTvShows[index].name,
+                          rating: popularTvShows[index].voteAverage,
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        itemCount: popularTvShows.length,
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        // controller: _controller,
+                      ),
+                    );
+                  }
+                  return const Text(AppData.somethingWentWrong);
+                },
+              )
             ],
           ),
         ),

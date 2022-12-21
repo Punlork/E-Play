@@ -12,6 +12,7 @@ abstract class MovieRepository {
   Future<Either<String, UpcomingMoviesModel>> getUpcomingMovies({int pageNumber});
   Future<Either<String, NowPlayMoviesModel>> getNowPlayingMovies({int pageNumber});
   Future<Either<String, VideoModel>> getVideoInfo({int movieId});
+  Future<Either<String, TrendingModel>> getTrending({String mediaType});
 }
 
 class MoviesRepositoryImpl extends MovieRepository {
@@ -93,6 +94,16 @@ class MoviesRepositoryImpl extends MovieRepository {
   Future<Either<String, VideoModel>> getVideoInfo({int movieId = 1}) async {
     try {
       final response = await service.getVideoInfo(movieId: movieId);
+      return Right(response);
+    } catch (e) {
+      return Left(e.toString());
+    }
+  }
+
+  @override
+  Future<Either<String, TrendingModel>> getTrending({String mediaType = 'all'}) async {
+    try {
+      final response = await service.getTrendingMovies(mediaType);
       return Right(response);
     } catch (e) {
       return Left(e.toString());

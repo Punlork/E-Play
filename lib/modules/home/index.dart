@@ -1,4 +1,5 @@
 // export 'application/movie/movie_bloc.dart.txt';
+export 'application/get_trending/get_trending_bloc.dart';
 export 'application/get_video_info/get_video_info_bloc.dart';
 export 'application/movie_detail/movie_detail_bloc.dart';
 export 'application/movie_suggestion/movie_suggestion_bloc.dart';
@@ -13,6 +14,7 @@ export 'domain/movie_suggestion_model.dart';
 export 'domain/playing_now_movies_model.dart';
 export 'domain/popular_movies_model.dart';
 export 'domain/popular_tv_shows_model.dart';
+export 'domain/trending_model.dart';
 export 'domain/upcoming_movie_model.dart';
 export 'domain/video_model.dart';
 
