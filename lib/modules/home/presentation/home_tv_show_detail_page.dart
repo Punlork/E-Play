@@ -70,9 +70,13 @@ class _HomeTvShowDetailPageState extends State<HomeTvShowDetailPage> {
     BlocProvider.of<TvShowDetailBloc>(context).add(
       OnGetTvShowDetail(int.parse(widget.tvShowId)),
     );
-    // BlocProvider.of<MovieSuggestionBloc>(context).add(
-    //   OnGetMovieSuggestion(int.parse(widget.tvShowId)),
-    // );
+    BlocProvider.of<TvShowSuggestionBloc>(context).add(
+      OnGetTvShowSuggestion(
+        showId: int.parse(widget.tvShowId),
+        pageNumber: 1,
+      ),
+      // OnGetMovieSuggestion(int.parse(widget.tvShowId)),
+    );
   }
 
   @override
@@ -337,18 +341,19 @@ class _HomeTvShowDetailPageState extends State<HomeTvShowDetailPage> {
                                       BookDescription(
                                         stateTvShow.overview!,
                                       ),
-                                      BlocBuilder<MovieSuggestionBloc, MovieSuggestionState>(
+                                      BlocBuilder<TvShowSuggestionBloc, TvShowSuggestionState>(
                                         builder: (context, state) {
-                                          if (state is MovieSuggestionLoading) {
+                                          if (state is TvShowSuggestionLoading) {
                                             return const Center(
                                               child: CircularProgressIndicator(),
                                             );
                                           }
-                                          if (state is MovieSuggestionFailed) {
+                                          if (state is TvShowSuggestionFailed) {
                                             return Center(child: Text(state.message));
                                           }
-                                          if (state is MovieSuggestionLoaded) {
-                                            // log(state.movieSuggestion.length.toString());
+                                          if (state is TvShowSuggestionLoaded) {
+                                            // log(showSuggestion.length.toString());
+                                            final showSuggestion = state.tvShowSuggestions;
                                             return Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
@@ -365,11 +370,11 @@ class _HomeTvShowDetailPageState extends State<HomeTvShowDetailPage> {
                                                 const SizedBox(height: 10),
                                                 const Divider(thickness: 2),
                                                 const SizedBox(height: 10),
-                                                if (state.movieSuggestion.isNotEmpty)
+                                                if (showSuggestion.isNotEmpty)
                                                   ...List.generate(
-                                                    state.movieSuggestion.length,
+                                                    showSuggestion.length,
                                                     (index) {
-                                                      final movie = state.movieSuggestion[index];
+                                                      final movie = showSuggestion[index];
                                                       return Container(
                                                         margin: const EdgeInsets.symmetric(
                                                           vertical: 10,
@@ -385,12 +390,10 @@ class _HomeTvShowDetailPageState extends State<HomeTvShowDetailPage> {
                                                           ),
                                                           child: BookItemCard(
                                                             description: movie.overview,
-                                                            isRRated: movie.adult,
-                                                            imgUrl: movie.posterPath ??
-                                                                movie.backdropPath ??
-                                                                '',
+                                                            isRRated: false,
+                                                            imgUrl: movie.posterPath,
                                                             producer: movie.voteAverage.toString(),
-                                                            title: movie.title,
+                                                            title: movie.name,
                                                           ),
                                                         ),
                                                       );

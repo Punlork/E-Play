@@ -8,12 +8,12 @@ class TvShowSuggestion {
 
   TvShowSuggestion.fromJson(Map<String, dynamic> json) {
     page = json['page'];
-    results = List.from(json['results']).map((e) => Results.fromJson(e)).toList();
+    results = List.from(json['results']).map((e) => TvShowSuggestionResults.fromJson(e)).toList();
     totalPages = json['total_pages'];
     totalResults = json['total_results'];
   }
   late final int page;
-  late final List<Results> results;
+  late final List<TvShowSuggestionResults> results;
   late final int totalPages;
   late final int totalResults;
 
@@ -27,8 +27,8 @@ class TvShowSuggestion {
   }
 }
 
-class Results {
-  Results({
+class TvShowSuggestionResults {
+  TvShowSuggestionResults({
     required this.backdropPath,
     required this.firstAirDate,
     required this.genreIds,
@@ -44,7 +44,7 @@ class Results {
     required this.voteCount,
   });
 
-  Results.fromJson(Map<String, dynamic> json) {
+  TvShowSuggestionResults.fromJson(Map<String, dynamic> json) {
     backdropPath = json['backdrop_path'];
     firstAirDate = json['first_air_date'];
     genreIds = List.castFrom<dynamic, int>(json['genre_ids']);

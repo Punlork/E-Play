@@ -7,6 +7,7 @@ export 'application/now_playing_movies/now_playing_movies_bloc.dart';
 export 'application/popular_movie/popular_movies_bloc.dart';
 export 'application/popular_tv_shows/popular_tv_shows_bloc.dart';
 export 'application/tv_show_detail/tv_show_detail_bloc.dart';
+export 'application/tv_show_suggestion/tv_show_suggestion_bloc.dart';
 export 'application/tv_show_video/tv_show_video_bloc.dart';
 export 'application/upcoming_movies/upcoming_movies_bloc.dart';
 

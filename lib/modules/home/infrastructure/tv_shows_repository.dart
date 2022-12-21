@@ -43,7 +43,7 @@ class TvShowsRepositoryImpl implements TvShowsRepository {
     try {
       final response = await service.getTvShowVideo(tvShowId);
       return Right(response);
-    } catch (e) {
+    } catch (e) { 
       return Left(e.toString());
     }
   }
