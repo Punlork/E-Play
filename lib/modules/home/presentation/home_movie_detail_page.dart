@@ -40,7 +40,7 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
 
     _scrollController = ScrollController();
     _youtubePlayerController = YoutubePlayerController(
-      initialVideoId: _title,
+      initialVideoId: videoId,
       flags: const YoutubePlayerFlags(
         forceHD: true,
       ),
@@ -103,40 +103,36 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
           },
         ),
       ],
-      child: WillPopScope(
-        onWillPop: () async {
-          BlocListener<MovieDetailBloc, MovieDetailState>(
-            listener: (context, state) {
-              if (state is MovieDetailLoaded) {
-                if (state.movieDetail.isEmpty) {
-                  GoRouter.of(context).goNamed(
-                    MainPage.routeName,
-                  );
-                } else {
-                  _title = state.movieDetail.last.title;
-                  BlocProvider.of<GetVideoInfoBloc>(context).add(
-                    OnGetVideoInfo(state.movieDetail.last.id),
-                  );
-                }
-              }
-            },
-          );
-          return true;
-        },
-        child: YoutubePlayerBuilder(
-          player: YoutubePlayer(
-            controller: _youtubePlayerController,
-            showVideoProgressIndicator: true,
-            onReady: () {
-              _youtubePlayerController.load(videoId);
-            },
-          ),
-          onExitFullScreen: () {
-            SystemChrome.setPreferredOrientations(
-              DeviceOrientation.values,
-            );
+      child: YoutubePlayerBuilder(
+        player: YoutubePlayer(
+          controller: _youtubePlayerController,
+          showVideoProgressIndicator: true,
+          onReady: () {
+            _youtubePlayerController.load(videoId);
           },
-          builder: (_, player) => Scaffold(
+        ),
+        onExitFullScreen: SystemChrome.restoreSystemUIOverlays,
+        builder: (_, player) => WillPopScope(
+          onWillPop: () async {
+            BlocListener<MovieDetailBloc, MovieDetailState>(
+              listener: (context, state) {
+                if (state is MovieDetailLoaded) {
+                  if (state.movieDetail.isEmpty) {
+                    GoRouter.of(context).goNamed(
+                      MainPage.routeName,
+                    );
+                  } else {
+                    _title = state.movieDetail.last.title;
+                    BlocProvider.of<GetVideoInfoBloc>(context).add(
+                      OnGetVideoInfo(state.movieDetail.last.id),
+                    );
+                  }
+                }
+              },
+            );
+            return true;
+          },
+          child: Scaffold(
             appBar: AppBar(
               automaticallyImplyLeading: false,
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -204,10 +200,7 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
                     }
                     if (state is GetVideoInfoLoaded) {
                       return AppPadding(
-                        child: AspectRatio(
-                          aspectRatio: 16 / 9,
-                          child: player,
-                        ),
+                        child: player,
                       );
                     }
                     return const SizedBox();
@@ -268,19 +261,19 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
                                                 Row(
                                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
-                                                    _CustomMovieDetailStatus(
+                                                    CustomMovieTvDetailStatus(
                                                       icon: Icons.thumb_up_outlined,
                                                       title: NumberFormat.compact()
                                                           .format(stateMovie.popularity),
                                                     ),
-                                                    _CustomMovieDetailStatus(
+                                                    CustomMovieTvDetailStatus(
                                                       icon: Icons.timelapse_outlined,
                                                       title: runtime,
                                                     ),
                                                   ],
                                                 ),
                                                 const SizedBox(height: 10),
-                                                _CustomMovieDetailStatus(
+                                                CustomMovieTvDetailStatus(
                                                   icon: Icons.today,
                                                   title: stateMovie.releaseDate.split('-').first,
                                                 ),
@@ -325,7 +318,7 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
                                             ),
                                       ),
                                       const Divider(),
-                                      _BookDescription(
+                                      BookDescription(
                                         stateMovie.overview,
                                       ),
                                       BlocBuilder<MovieSuggestionBloc, MovieSuggestionState>(
@@ -426,76 +419,6 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _CustomMovieDetailStatus extends StatelessWidget {
-  const _CustomMovieDetailStatus({
-    required this.title,
-    required this.icon,
-  });
-
-  final String title;
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(
-          icon,
-          size: 15,
-        ),
-        const SizedBox(width: 5),
-        Text(
-          title,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Colors.grey,
-              ),
-        ),
-      ],
-    );
-  }
-}
-
-class _BookDescription extends StatefulWidget {
-  const _BookDescription(String description) : _description = description;
-
-  final String _description;
-
-  @override
-  State<_BookDescription> createState() => _BookDescriptionState();
-}
-
-class _BookDescriptionState extends State<_BookDescription> {
-  bool isShowMore = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedSize(
-      duration: const Duration(milliseconds: 300),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Text(
-            widget._description,
-            style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                  height: 2,
-                  color: Colors.grey,
-                ),
-            maxLines: isShowMore ? null : 2,
-            overflow: isShowMore ? null : TextOverflow.ellipsis,
-          ),
-          TextButton(
-            onPressed: () {
-              isShowMore = !isShowMore;
-              setState(() {});
-            },
-            child: const Text('show more'),
-          ),
-        ],
       ),
     );
   }

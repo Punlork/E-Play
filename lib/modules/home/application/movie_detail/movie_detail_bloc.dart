@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'package:bloc/bloc.dart';
-import 'package:e_book_app/modules/home/domain/movie_detail_model.dart';
-import 'package:e_book_app/modules/home/infrastructure/movie_repository.dart';
-import 'package:equatable/equatable.dart';
+
+import 'package:e_book_app/index.dart';
 
 part 'movie_detail_event.dart';
 part 'movie_detail_state.dart';

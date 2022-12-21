@@ -1,12 +1,12 @@
 class AppData {
   AppData._();
+  static const String mainUrl = 'https://api.themoviedb.org/3/movie';
+  static const String mainUrlTV = 'https://api.themoviedb.org/3/tv';
+  static const String mainUrlTrending = 'https://api.themoviedb.org/3/trending';
 
   static const String somethingWentWrong = 'Something went wrong';
 
   static const String apiKey = '022cb7dedba411c017779a0bbf531c69';
-  static const String mainUrl = 'https://api.themoviedb.org/3/movie';
-  static const String mainUrlTV = 'https://api.themoviedb.org/3/tv';
-  static const String mainUrlTrending = 'https://api.themoviedb.org/3/trending';
   static const String suggestionMovie = '$mainUrl/movie_suggestions.json';
   static const String listMovie = '$mainUrl/list_movies.json';
   static const String movieDetail = '$mainUrl/movie_details.json';
@@ -43,7 +43,19 @@ class AppData {
       '$mainUrl/now_playing?api_key=$apiKey&language=en-US&page=$pageNumber';
 
   static String getTVPopularMovies({required String pageNumber}) =>
-      '$mainUrlTV/popular?api_key=$apiKey&language=en-US&&page=$pageNumber';
+      '$mainUrlTV/popular?api_key=$apiKey&language=en-US&page=$pageNumber';
+
+  static String getTvShowDetail({required int tvShowId}) =>
+      '$mainUrlTV/$tvShowId?api_key=$apiKey&language=en-US';
+
+  static String getTvShowVideos({required int tvShowId}) =>
+      '$mainUrlTV/$tvShowId/videos?api_key=$apiKey&language=en-US';
+
+  static String getTvShowSuggestion({
+    required int tvShowId,
+    required int pageNumber,
+  }) =>
+      '$mainUrlTV/$tvShowId/recommendations?api_key=$apiKey&language=en-US&page=$pageNumber';
 
   static const String getLatestMovies = '$mainUrl/latest?api_key=$apiKey&language=en-US';
 }

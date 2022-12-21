@@ -15,6 +15,7 @@ class PopularTvShowsBloc extends Bloc<PopularTvShowsEvent, PopularTvShowsState> 
     OnGetPopularTvShow event,
     Emitter<PopularTvShowsState> emit,
   ) async {
+    emit(PopularTvShowsLoading());
     final result = await repository.getPopularTvShows(
       pageNumber: event.pageNumber,
     );

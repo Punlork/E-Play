@@ -53,7 +53,7 @@ class PopularTVShowModelResults {
   late final String posterPath;
   late final double popularity;
   late final int id;
-  late final String backdropPath;
+  late final String? backdropPath;
   late final num voteAverage;
   late final String overview;
   late final String firstAirDate;

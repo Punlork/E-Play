@@ -1,8 +1,5 @@
 import 'dart:async';
-import 'package:bloc/bloc.dart';
-import 'package:e_book_app/modules/home/domain/popular_movies_model.dart';
-import 'package:e_book_app/modules/home/infrastructure/movie_repository.dart';
-import 'package:equatable/equatable.dart';
+import 'package:e_book_app/index.dart';
 
 part 'popular_movies_event.dart';
 part 'popular_movies_state.dart';

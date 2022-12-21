@@ -1,0 +1,4 @@
+enum DetailType {
+  tvShow,
+  movie,
+}

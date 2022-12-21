@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage> {
                   if (state is GetTrendingFailed) {
                     return Text(state.message);
                   }
-                  if (state is GetTrendingFailed) {
+                  if (state is GetTrendingLoading) {
                     return const CircularProgressIndicator();
                   }
                   if (state is GetTrendingLoaded) {
@@ -129,7 +129,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     );
                   }
-                  return const Text(AppData.somethingWentWrong);
+                  return const SizedBox();
                 },
               ),
               const SizedBox(height: 10),
@@ -151,6 +151,7 @@ class _HomePageState extends State<HomePage> {
                       size: const Size.fromHeight(250),
                       child: ListView.builder(
                         itemBuilder: (context, index) => MoviesTvShowCardBox(
+                          type: DetailType.movie,
                           id: upcomingMovie[index].id.toString(),
                           imgUrl: upcomingMovie[index].posterPath,
                           title: upcomingMovie[index].title,
@@ -194,6 +195,7 @@ class _HomePageState extends State<HomePage> {
                       size: const Size.fromHeight(250),
                       child: ListView.builder(
                         itemBuilder: (context, index) => MoviesTvShowCardBox(
+                          type: DetailType.movie,
                           id: nowPlaying[index].id.toString(),
                           imgUrl: nowPlaying[index].posterPath,
                           title: nowPlaying[index].title,
@@ -231,6 +233,7 @@ class _HomePageState extends State<HomePage> {
                       size: const Size.fromHeight(250),
                       child: ListView.builder(
                         itemBuilder: (context, index) => MoviesTvShowCardBox(
+                          type: DetailType.movie,
                           id: state.popularMovies[index].id.toString(),
                           imgUrl: state.popularMovies[index].posterPath,
                           title: state.popularMovies[index].title,
@@ -270,6 +273,7 @@ class _HomePageState extends State<HomePage> {
                       size: const Size.fromHeight(250),
                       child: ListView.builder(
                         itemBuilder: (context, index) => MoviesTvShowCardBox(
+                          type: DetailType.tvShow,
                           id: popularTvShows[index].id.toString(),
                           imgUrl: popularTvShows[index].posterPath,
                           title: popularTvShows[index].name,
