@@ -8,11 +8,16 @@ abstract class MovieRepository {
     int movieId,
     int pageNumber,
   });
+  Future<Either<String, MovieReviews>> getMovieReviews({
+    int movieId,
+    int pageNumber,
+  });
   Future<Either<String, List<PopularMoviesData>>> getPopularMovies({int pageNumber});
   Future<Either<String, UpcomingMoviesModel>> getUpcomingMovies({int pageNumber});
   Future<Either<String, NowPlayMoviesModel>> getNowPlayingMovies({int pageNumber});
   Future<Either<String, VideoModel>> getVideoInfo({int movieId});
   Future<Either<String, TrendingModel>> getTrending({String mediaType});
+  Future<Either<String, TopRatedMovies>> getTopRatedMovies({int pageNumber});
 }
 
 class MoviesRepositoryImpl extends MovieRepository {
@@ -104,6 +109,32 @@ class MoviesRepositoryImpl extends MovieRepository {
   Future<Either<String, TrendingModel>> getTrending({String mediaType = 'all'}) async {
     try {
       final response = await service.getTrendingMovies(mediaType);
+      return Right(response);
+    } catch (e) {
+      return Left(e.toString());
+    }
+  }
+
+  @override
+  Future<Either<String, TopRatedMovies>> getTopRatedMovies({int pageNumber = 1}) async {
+    try {
+      final response = await service.getTopRatedMovies(pageNumber);
+      return Right(response);
+    } catch (e) {
+      return Left(e.toString());
+    }
+  }
+
+  @override
+  Future<Either<String, MovieReviews>> getMovieReviews({
+    int movieId = 1,
+    int pageNumber = 1,
+  }) async {
+    try {
+      final response = await service.getMovieReviews(
+        pageNumber: pageNumber,
+        movieId: movieId,
+      );
       return Right(response);
     } catch (e) {
       return Left(e.toString());

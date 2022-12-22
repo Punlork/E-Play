@@ -7,6 +7,7 @@ export 'package:get_it/get_it.dart';
 export 'package:go_router/go_router.dart';
 export 'package:google_fonts/google_fonts.dart';
 export 'package:shared_preferences/shared_preferences.dart';
+export 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 export 'common/index.dart';
 export 'modules/index.dart';

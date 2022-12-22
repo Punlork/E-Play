@@ -42,8 +42,9 @@ class _AppIndex extends StatelessWidget {
             textTheme: _textTheme(),
           ),
           darkTheme: ThemeData(
+            scaffoldBackgroundColor: AppColors.black,
             colorScheme: const ColorScheme.dark(
-              primary: Color(0xff51A8DE),
+              primary: AppColors.red,
               secondary: Color(0xffffffff),
             ),
             bottomNavigationBarTheme: const BottomNavigationBarThemeData(
@@ -67,28 +68,31 @@ class _AppIndex extends StatelessWidget {
   TextTheme _textTheme() {
     return TextTheme(
       headlineLarge: GoogleFonts.quicksand(
-        letterSpacing: 3,
         fontWeight: FontWeight.bold,
         fontSize: 22,
       ),
-      titleLarge: GoogleFonts.ptSerifCaption(
+      titleLarge: GoogleFonts.quicksand(
         color: AppColors.red,
-        fontSize: 14,
+        fontSize: 16,
         fontWeight: FontWeight.bold,
-        letterSpacing: 3,
       ),
-      titleMedium: GoogleFonts.ptSerifCaption(
+      titleMedium: GoogleFonts.quicksand(
         color: AppColors.white,
         fontSize: 10,
-        fontWeight: FontWeight.bold,
-        letterSpacing: 3,
+        // fontWeight: FontWeight.bold,
       ),
-      labelMedium: GoogleFonts.notoSans(
+      bodyMedium: GoogleFonts.quicksand(
+        color: AppColors.white,
+        fontSize: 10,
+        letterSpacing: 2,
+        height: 2,
+      ),
+      labelMedium: GoogleFonts.quicksand(
         fontWeight: FontWeight.bold,
         fontSize: 10,
         color: AppColors.white,
       ),
-      labelLarge: GoogleFonts.openSans(
+      labelLarge: GoogleFonts.quicksand(
         fontSize: 11,
         color: AppColors.gray,
         // fontWeight: FontWeight.bold,

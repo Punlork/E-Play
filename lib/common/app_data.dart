@@ -39,6 +39,15 @@ class AppData {
   static String getUpcomingMovies({required String pageNumber}) =>
       '$mainUrl/upcoming?api_key=$apiKey&language=en-US&page=$pageNumber';
 
+  static String getTopRatedMovies({required int pageNumber}) =>
+      '$mainUrl/top_rated?api_key=$apiKey&language=en-US&page=$pageNumber';
+
+  static String getMovieReviews({
+    required int pageNumber,
+    required int movieId,
+  }) =>
+      '$mainUrl/$movieId/reviews?api_key=$apiKey&language=en-US&page=$pageNumber';
+
   static String getNowPlayingMovies({required String pageNumber}) =>
       '$mainUrl/now_playing?api_key=$apiKey&language=en-US&page=$pageNumber';
 
@@ -50,6 +59,15 @@ class AppData {
 
   static String getTvShowVideos({required int tvShowId}) =>
       '$mainUrlTV/$tvShowId/videos?api_key=$apiKey&language=en-US';
+
+  static String getTvShowReviews({
+    required int pageNumber,
+    required int tvShowId,
+  }) =>
+      '$mainUrlTV/$tvShowId/reviews?api_key=$apiKey&language=en-US&page=$pageNumber';
+
+  static String getTopRatedTvShow({required int pageNumber}) =>
+      '$mainUrlTV/top_rated?api_key=$apiKey&language=en-US&page=$pageNumber';
 
   static String getTvShowSuggestion({
     required int tvShowId,

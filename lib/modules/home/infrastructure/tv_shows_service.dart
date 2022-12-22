@@ -1,5 +1,5 @@
 import 'package:e_book_app/index.dart';
-import 'package:e_book_app/modules/home/domain/tv_shows/tv_shows_video.dart';
+import 'package:e_book_app/modules/home/domain/tv_shows/tv_show_reviews_model.dart';
 
 class TVShowsService {
   TVShowsService(this._dio);
@@ -38,5 +38,25 @@ class TVShowsService {
       ),
     );
     return TvShowSuggestion.fromJson(response.data);
+  }
+
+  Future<TopRatedTvShow> getTopRatedTvShow(int pageNumber) async {
+    final response = await _dio.get<dynamic>(
+      AppData.getTopRatedTvShow(pageNumber: pageNumber),
+    );
+    return TopRatedTvShow.fromJson(response.data);
+  }
+
+  Future<TvShowReviews> getTvShowReviews({
+    required int pageNumber,
+    required int tvShowId,
+  }) async {
+    final response = await _dio.get<dynamic>(
+      AppData.getTvShowReviews(
+        pageNumber: pageNumber,
+        tvShowId: tvShowId,
+      ),
+    );
+    return TvShowReviews.fromJson(response.data);
   }
 }

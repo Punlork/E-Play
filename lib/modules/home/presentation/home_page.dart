@@ -49,6 +49,13 @@ class _HomePageState extends State<HomePage> {
     BlocProvider.of<GetTrendingBloc>(context).add(
       const OnGetTrending('all'),
     );
+    BlocProvider.of<TopRatedMoviesBloc>(context).add(
+      const OnGetTopRatedMovies(1),
+    );
+
+    BlocProvider.of<TopRatedTvShowBloc>(context).add(
+      const OnGetTopRatedTvShow(1),
+    );
   }
 
   @override
@@ -125,7 +132,7 @@ class _HomePageState extends State<HomePage> {
                       options: CarouselOptions(
                         autoPlay: true,
                         viewportFraction: 0.9,
-                        aspectRatio: 1.8,
+                        aspectRatio: 2.5,
                       ),
                     );
                   }
@@ -148,7 +155,7 @@ class _HomePageState extends State<HomePage> {
                   if (state is UpcomingMoviesLoaded) {
                     final upcomingMovie = state.upComingMovies;
                     return SizedBox.fromSize(
-                      size: const Size.fromHeight(250),
+                      size: const Size.fromHeight(150),
                       child: ListView.builder(
                         itemBuilder: (context, index) => MoviesTvShowCardBox(
                           type: DetailType.movie,
@@ -173,6 +180,7 @@ class _HomePageState extends State<HomePage> {
                   );
                 },
               ),
+              const SizedBox(height: 10),
               AppPadding(
                 child: Text(
                   'In Theater',
@@ -192,7 +200,7 @@ class _HomePageState extends State<HomePage> {
                     final nowPlaying = state.nowPlayingMovies;
 
                     return SizedBox.fromSize(
-                      size: const Size.fromHeight(250),
+                      size: const Size.fromHeight(150),
                       child: ListView.builder(
                         itemBuilder: (context, index) => MoviesTvShowCardBox(
                           type: DetailType.movie,
@@ -213,6 +221,7 @@ class _HomePageState extends State<HomePage> {
                   return const Text(AppData.somethingWentWrong);
                 },
               ),
+              const SizedBox(height: 10),
               AppPadding(
                 child: Text(
                   'Popular Movies',
@@ -230,7 +239,7 @@ class _HomePageState extends State<HomePage> {
                   }
                   if (state is PopularMoviesLoaded) {
                     return SizedBox.fromSize(
-                      size: const Size.fromHeight(250),
+                      size: const Size.fromHeight(150),
                       child: ListView.builder(
                         itemBuilder: (context, index) => MoviesTvShowCardBox(
                           type: DetailType.movie,
@@ -270,7 +279,7 @@ class _HomePageState extends State<HomePage> {
                   if (state is PopularTvShowsLoaded) {
                     final popularTvShows = state.popularTvShows;
                     return SizedBox.fromSize(
-                      size: const Size.fromHeight(250),
+                      size: const Size.fromHeight(150),
                       child: ListView.builder(
                         itemBuilder: (context, index) => MoviesTvShowCardBox(
                           type: DetailType.tvShow,
@@ -289,7 +298,85 @@ class _HomePageState extends State<HomePage> {
                   }
                   return const Text(AppData.somethingWentWrong);
                 },
-              )
+              ),
+              const SizedBox(height: 10),
+              AppPadding(
+                child: Text(
+                  'Top Rated Movies',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ),
+              const SizedBox(height: 10),
+              BlocBuilder<TopRatedMoviesBloc, TopRatedMoviesState>(
+                builder: (context, state) {
+                  if (state is TopRatedMoviesFailed) {
+                    return Text(state.message);
+                  }
+                  if (state is TopRatedMoviesLoading) {
+                    return const CircularProgressIndicator();
+                  }
+                  if (state is TopRatedMoviesLoaded) {
+                    final topRatedMovies = state.topRatedMovies;
+                    return SizedBox.fromSize(
+                      size: const Size.fromHeight(150),
+                      child: ListView.builder(
+                        itemBuilder: (context, index) => MoviesTvShowCardBox(
+                          type: DetailType.movie,
+                          id: topRatedMovies[index].id.toString(),
+                          imgUrl: topRatedMovies[index].posterPath,
+                          title: topRatedMovies[index].title,
+                          rating: topRatedMovies[index].voteAverage,
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        itemCount: topRatedMovies.length,
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        // controller: _controller,
+                      ),
+                    );
+                  }
+                  return const Text(AppData.somethingWentWrong);
+                },
+              ),
+              const SizedBox(height: 10),
+              AppPadding(
+                child: Text(
+                  'Top Rated Series',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ),
+              const SizedBox(height: 10),
+              BlocBuilder<TopRatedTvShowBloc, TopRatedTvShowState>(
+                builder: (context, state) {
+                  if (state is TopRatedTvShowFailed) {
+                    return Text(state.message);
+                  }
+                  if (state is TopRatedTvShowLoading) {
+                    return const CircularProgressIndicator();
+                  }
+                  if (state is TopRatedTvShowLoaded) {
+                    final topRatedTvShow = state.topRatedTvShow;
+                    return SizedBox.fromSize(
+                      size: const Size.fromHeight(150),
+                      child: ListView.builder(
+                        itemBuilder: (context, index) => MoviesTvShowCardBox(
+                          type: DetailType.tvShow,
+                          id: topRatedTvShow[index].id.toString(),
+                          imgUrl: topRatedTvShow[index].posterPath,
+                          title: topRatedTvShow[index].name,
+                          rating: topRatedTvShow[index].voteAverage,
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        itemCount: topRatedTvShow.length,
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        // controller: _controller,
+                      ),
+                    );
+                  }
+                  return const Text(AppData.somethingWentWrong);
+                },
+              ),
             ],
           ),
         ),

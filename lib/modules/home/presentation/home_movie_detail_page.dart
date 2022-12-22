@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:e_book_app/index.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class HomeDetailPage extends StatefulWidget {
   const HomeDetailPage({super.key, required this.movieId});
@@ -34,10 +33,17 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
   bool _showTitle = false;
 
   @override
+  void dispose() {
+    super.dispose();
+    BlocProvider.of<MovieDetailBloc>(context).add(
+      const OnRemoveMovieDetail(),
+    );
+  }
+
+  @override
   void initState() {
     super.initState();
     log(widget.movieId);
-
     _scrollController = ScrollController();
     _youtubePlayerController = YoutubePlayerController(
       initialVideoId: videoId,
@@ -63,6 +69,13 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
     );
     BlocProvider.of<MovieSuggestionBloc>(context).add(
       OnGetMovieSuggestion(int.parse(widget.movieId)),
+    );
+
+    BlocProvider.of<MovieReviewsBloc>(context).add(
+      OnGetMovieReviews(
+        movieId: int.parse(widget.movieId),
+        pageNumber: 1,
+      ),
     );
   }
 
@@ -95,8 +108,11 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
         BlocListener<GetVideoInfoBloc, GetVideoInfoState>(
           listener: (context, state) {
             if (state is GetVideoInfoLoaded) {
-              final videoOfficialId =
-                  state.videoInfo.where((element) => element.official == true).toList();
+              final videoOfficialId = state.videoInfo
+                  .where(
+                    (element) => element.official == true && element.type == 'Trailer',
+                  )
+                  .toList();
               videoId = videoOfficialId.first.key;
               setState(() {});
             }
@@ -156,7 +172,6 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
                             BlocProvider.of<MovieDetailBloc>(context).add(
                               const OnRemoveMovieDetail(),
                             );
-                            if (state.movieDetail.isNotEmpty) {}
                           }
                         },
                       );
@@ -168,7 +183,7 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
                       duration: const Duration(milliseconds: 500),
                       child: Text(
                         _title,
-                        style: Theme.of(context).textTheme.titleSmall,
+                        style: Theme.of(context).textTheme.headlineLarge,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
@@ -292,13 +307,13 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
                                               ],
                                             ),
                                             const SizedBox(height: 20),
-                                            TextButton(
-                                              onPressed: () {},
-                                              child: Text(
-                                                'Movie Trailer',
-                                                style: Theme.of(context).textTheme.button,
+                                            CustomElevatedButton(
+                                              title: 'Reviews',
+                                              onPressed: () => MovieReview.showMovieReview(
+                                                context,
+                                                type: DetailType.movie,
                                               ),
-                                            )
+                                            ),
                                           ],
                                         ),
                                       )
@@ -313,9 +328,7 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
                                     children: <Widget>[
                                       Text(
                                         'Movie Description',
-                                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                              color: Theme.of(context).colorScheme.primary,
-                                            ),
+                                        style: Theme.of(context).textTheme.titleLarge,
                                       ),
                                       const Divider(),
                                       BookDescription(
@@ -332,19 +345,12 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
                                             return Center(child: Text(state.message));
                                           }
                                           if (state is MovieSuggestionLoaded) {
-                                            // log(state.movieSuggestion.length.toString());
                                             return Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(
                                                   'Movie Suggestion',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .titleMedium
-                                                      ?.copyWith(
-                                                        color:
-                                                            Theme.of(context).colorScheme.primary,
-                                                      ),
+                                                  style: Theme.of(context).textTheme.titleLarge,
                                                 ),
                                                 const SizedBox(height: 10),
                                                 const Divider(thickness: 2),
@@ -432,16 +438,19 @@ class GenreDescription extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 10,
+        vertical: 5,
+      ),
       decoration: BoxDecoration(
-        border: Border.all(color: Theme.of(context).colorScheme.primary),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.primary,
+        ),
         borderRadius: BorderRadius.circular(32),
       ),
       child: Text(
         title,
-        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: Theme.of(context).colorScheme.primary,
-            ),
+        style: Theme.of(context).textTheme.labelLarge?.copyWith(),
       ),
     );
   }

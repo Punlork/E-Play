@@ -74,4 +74,24 @@ class MovieService {
     );
     return TrendingModel.fromJson(response.data);
   }
+
+  Future<TopRatedMovies> getTopRatedMovies(int pageNumber) async {
+    final response = await service.get<dynamic>(
+      AppData.getTopRatedMovies(pageNumber: pageNumber),
+    );
+    return TopRatedMovies.fromJson(response.data);
+  }
+
+  Future<MovieReviews> getMovieReviews({
+    required int pageNumber,
+    required int movieId,
+  }) async {
+    final response = await service.get<dynamic>(
+      AppData.getMovieReviews(
+        pageNumber: pageNumber,
+        movieId: movieId,
+      ),
+    );
+    return MovieReviews.fromJson(response.data);
+  }
 }

@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:e_book_app/index.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class HomeTvShowDetailPage extends StatefulWidget {
   const HomeTvShowDetailPage({
@@ -33,6 +32,7 @@ class _HomeTvShowDetailPageState extends State<HomeTvShowDetailPage> {
   String _title = '';
   String videoId = '';
   late ScrollController _scrollController;
+  late final ScrollController _seriesReviewScrollController;
   late YoutubePlayerController _youtubePlayerController;
   bool _showTitle = false;
 
@@ -45,9 +45,10 @@ class _HomeTvShowDetailPageState extends State<HomeTvShowDetailPage> {
   @override
   void initState() {
     super.initState();
-    log(widget.tvShowId);
 
+    log(widget.tvShowId);
     _scrollController = ScrollController();
+    _seriesReviewScrollController = ScrollController();
     _youtubePlayerController = YoutubePlayerController(
       initialVideoId: videoId,
       flags: const YoutubePlayerFlags(
@@ -63,6 +64,14 @@ class _HomeTvShowDetailPageState extends State<HomeTvShowDetailPage> {
         setState(() {});
       }
     });
+
+    _seriesReviewScrollController.addListener(() {
+      log(_seriesReviewScrollController.offset.toString());
+      if (_seriesReviewScrollController.offset ==
+          _seriesReviewScrollController.position.maxScrollExtent) {
+        log('Max');
+      }
+    });
     _onInit();
   }
 
@@ -75,7 +84,12 @@ class _HomeTvShowDetailPageState extends State<HomeTvShowDetailPage> {
         showId: int.parse(widget.tvShowId),
         pageNumber: 1,
       ),
-      // OnGetMovieSuggestion(int.parse(widget.tvShowId)),
+    );
+    BlocProvider.of<TvShowReviewsBloc>(context).add(
+      OnGetTvShowReview(
+        pageNumber: 1,
+        tvShowId: int.parse(widget.tvShowId),
+      ),
     );
   }
 
@@ -128,7 +142,6 @@ class _HomeTvShowDetailPageState extends State<HomeTvShowDetailPage> {
           },
         ),
         onExitFullScreen: () {
-          // SystemChrome.setPreferredOrientations(DeviceOrientation.values);
           SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
         },
         builder: (_, player) => WillPopScope(
@@ -185,7 +198,7 @@ class _HomeTvShowDetailPageState extends State<HomeTvShowDetailPage> {
                       duration: const Duration(milliseconds: 500),
                       child: Text(
                         _title,
-                        style: Theme.of(context).textTheme.titleSmall,
+                        style: Theme.of(context).textTheme.headlineLarge,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
@@ -225,7 +238,9 @@ class _HomeTvShowDetailPageState extends State<HomeTvShowDetailPage> {
                 BlocBuilder<TvShowDetailBloc, TvShowDetailState>(
                   builder: (context, state) {
                     if (state is TvShowDetailLoading) {
-                      return const CircularProgressIndicator();
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
                     }
                     if (state is TvShowDetailFailed) {
                       return const Center(child: CircularProgressIndicator());
@@ -233,7 +248,6 @@ class _HomeTvShowDetailPageState extends State<HomeTvShowDetailPage> {
                     if (state is TvShowDetailLoaded) {
                       if (state.tvShowDetail.isNotEmpty) {
                         final stateTvShow = state.tvShowDetail.last;
-                        // final runtime = _getTimeString(stateTvShow.numberOfSeasons!);
                         return Expanded(
                           child: SingleChildScrollView(
                             controller: _scrollController,
@@ -247,7 +261,7 @@ class _HomeTvShowDetailPageState extends State<HomeTvShowDetailPage> {
                                         child: ClipRRect(
                                           borderRadius: BorderRadius.circular(6),
                                           child: Banner(
-                                            message: '//${stateTvShow.voteAverage ?? ''}',
+                                            message: '${stateTvShow.voteAverage}',
                                             location: BannerLocation.topEnd,
                                             child: Image.network(
                                               AppData.imagePath(
@@ -312,11 +326,12 @@ class _HomeTvShowDetailPageState extends State<HomeTvShowDetailPage> {
                                               ],
                                             ),
                                             const SizedBox(height: 20),
-                                            TextButton(
-                                              onPressed: () {},
-                                              child: Text(
-                                                'Movie Trailer',
-                                                style: Theme.of(context).textTheme.button,
+                                            CustomElevatedButton(
+                                              title: 'Reviews',
+                                              onPressed: () => MovieReview.showMovieReview(
+                                                context,
+                                                type: DetailType.tvShow,
+                                                tvShowController: _seriesReviewScrollController,
                                               ),
                                             )
                                           ],
@@ -333,9 +348,7 @@ class _HomeTvShowDetailPageState extends State<HomeTvShowDetailPage> {
                                     children: <Widget>[
                                       Text(
                                         'Series Description',
-                                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                              color: Theme.of(context).colorScheme.primary,
-                                            ),
+                                        style: Theme.of(context).textTheme.titleLarge,
                                       ),
                                       const Divider(),
                                       BookDescription(
@@ -359,13 +372,7 @@ class _HomeTvShowDetailPageState extends State<HomeTvShowDetailPage> {
                                               children: [
                                                 Text(
                                                   'Series Suggestion',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .titleMedium
-                                                      ?.copyWith(
-                                                        color:
-                                                            Theme.of(context).colorScheme.primary,
-                                                      ),
+                                                  style: Theme.of(context).textTheme.titleLarge,
                                                 ),
                                                 const SizedBox(height: 10),
                                                 const Divider(thickness: 2),

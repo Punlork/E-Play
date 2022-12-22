@@ -20,5 +20,9 @@ void movieServiceLocator() {
     ..registerFactory<GetTrendingBloc>(() => GetTrendingBloc(getIt()))
     ..registerFactory<TvShowDetailBloc>(() => TvShowDetailBloc(getIt()))
     ..registerFactory<TvShowVideoBloc>(() => TvShowVideoBloc(getIt()))
-    ..registerFactory<TvShowSuggestionBloc>(() => TvShowSuggestionBloc(getIt()));
+    ..registerFactory<TvShowSuggestionBloc>(() => TvShowSuggestionBloc(getIt()))
+    ..registerFactory<TopRatedMoviesBloc>(() => TopRatedMoviesBloc(getIt()))
+    ..registerFactory<TopRatedTvShowBloc>(() => TopRatedTvShowBloc(getIt()))
+    ..registerFactory<MovieReviewsBloc>(() => MovieReviewsBloc(getIt()))
+    ..registerFactory<TvShowReviewsBloc>(() => TvShowReviewsBloc(getIt()));
 }

@@ -37,33 +37,9 @@ class MoviesTvShowCardBox extends StatelessWidget {
           );
         }
       },
-      child: SizedBox.fromSize(
-        size: const Size.fromWidth(150),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox.fromSize(
-              size: const Size.fromHeight(200),
-              child: ImageCardWidget(
-                imgUrl: imgUrl,
-                rating: rating,
-              ),
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              width: 140,
-              child: Text(
-                title,
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      letterSpacing: 2,
-                    ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            )
-          ],
-        ),
+      child: ImageCardWidget(
+        imgUrl: imgUrl,
+        rating: rating,
       ),
     );
   }
