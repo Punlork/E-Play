@@ -21,6 +21,13 @@ class HomeTvShowDetailPage extends StatefulWidget {
     builder: (context, state) => HomeTvShowDetailPage(
       tvShowId: state.queryParams['tv_show_id'] ?? '',
     ),
+    pageBuilder: (context, state) => AppRouteTransition(
+      context: context,
+      state: state,
+      child: HomeTvShowDetailPage(
+        tvShowId: state.queryParams['tv_show_id'] ?? '',
+      ),
+    ),
   );
 
   @override
@@ -68,9 +75,7 @@ class _HomeTvShowDetailPageState extends State<HomeTvShowDetailPage> {
     _seriesReviewScrollController.addListener(() {
       log(_seriesReviewScrollController.offset.toString());
       if (_seriesReviewScrollController.offset ==
-          _seriesReviewScrollController.position.maxScrollExtent) {
-        log('Max');
-      }
+          _seriesReviewScrollController.position.maxScrollExtent) {}
     });
     _onInit();
   }
@@ -118,7 +123,7 @@ class _HomeTvShowDetailPageState extends State<HomeTvShowDetailPage> {
             if (state is TvShowVideoLoaded) {
               final videoOfficialId = state.tvShowVideos
                   .where(
-                    (element) => element.official == true && element.type == 'Trailer',
+                    (element) => element.official ?? true && element.type == 'Trailer',
                   )
                   .toList();
 

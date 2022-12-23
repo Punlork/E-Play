@@ -34,6 +34,7 @@ class MovieReview {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       AppPadding(
+                        vertical: 10,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -50,11 +51,9 @@ class MovieReview {
                           ],
                         ),
                       ),
-                      const AppPadding(
-                        child: Divider(),
-                      ),
+                      const AppPadding(child: Divider()),
                       if (movieReviews.isNotEmpty)
-                        Expanded(
+                        Flexible(
                           child: ListView.separated(
                             separatorBuilder: (context, index) => const Divider(),
                             itemBuilder: (context, index) {
@@ -116,11 +115,9 @@ class MovieReview {
                           ],
                         ),
                       ),
-                      const AppPadding(
-                        child: Divider(),
-                      ),
+                      const AppPadding(child: Divider()),
                       if (tvShowReviews.isNotEmpty)
-                        Expanded(
+                        Flexible(
                           child: ListView.separated(
                             controller: tvShowController,
                             separatorBuilder: (context, index) => const Divider(),
@@ -182,12 +179,14 @@ class _ReviewDetail extends StatelessWidget {
               )
             : Image.asset(AppPath.userAvatar).image,
       ),
+      // contentPadding: EdgeInsets.zero,
+      minVerticalPadding: 12,
       title: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Text(
             'User : ',
-            style: Theme.of(context).textTheme.bodyMedium,
+            style: Theme.of(context).textTheme.labelMedium,
           ),
           Text(
             '$name - $rating',
@@ -200,10 +199,13 @@ class _ReviewDetail extends StatelessWidget {
         children: [
           Text(
             'Review : ',
-            style: Theme.of(context).textTheme.bodyMedium,
+            style: Theme.of(context).textTheme.labelMedium,
           ),
           Flexible(
-            child: Text(reviews),
+            child: Text(
+              reviews,
+              style: Theme.of(context).textTheme.labelMedium,
+            ),
           ),
         ],
       ),

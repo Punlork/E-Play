@@ -9,9 +9,13 @@ class MovieSuggestionBloc extends Bloc<MovieSuggestionEvent, MovieSuggestionStat
       : _movieRepository = repository,
         super(MovieSuggestionInitial()) {
     on<OnGetMovieSuggestion>(_onGetMovieSuggestion);
+    on<OnGetMovieSuggestionNext>(_onGetMovieSuggestionNext);
+    on<OnGetMovieSuggestionClear>(_onGetMovieSuggestionClear);
   }
 
   final MovieRepository _movieRepository;
+
+  final List<MovieSuggestionResults> _suggestionMovies = [];
 
   Future<FutureOr<void>> _onGetMovieSuggestion(
     OnGetMovieSuggestion event,
@@ -21,7 +25,45 @@ class MovieSuggestionBloc extends Bloc<MovieSuggestionEvent, MovieSuggestionStat
     final result = await _movieRepository.getMovieSuggestion(movieId: event.movieId);
     result.fold(
       (l) => emit(MovieSuggestionFailed(l)),
-      (r) => emit(MovieSuggestionLoaded(r)),
+      (r) => {
+        _suggestionMovies.addAll(r),
+        emit(MovieSuggestionLoaded(_suggestionMovies)),
+      },
     );
+  }
+
+  Future<FutureOr<void>> _onGetMovieSuggestionNext(
+    OnGetMovieSuggestionNext event,
+    Emitter<MovieSuggestionState> emit,
+  ) async {
+    final stateLoaded = state as MovieSuggestionLoaded;
+    emit(stateLoaded.copyWith(status: PaginateStatus.loading));
+    final result = await _movieRepository.getMovieSuggestion(
+      movieId: event.movieId,
+      pageNumber: event.pageNumber,
+    );
+    result.fold(
+      (l) => emit(stateLoaded.copyWith(status: PaginateStatus.failed)),
+      (r) {
+        if (r.isNotEmpty) {
+          _suggestionMovies.addAll(r);
+          emit(
+            stateLoaded.copyWith(
+              status: PaginateStatus.loaded,
+              movieSuggestion: _suggestionMovies,
+            ),
+          );
+        } else {
+          emit(stateLoaded.copyWith(status: PaginateStatus.empty));
+        }
+      },
+    );
+  }
+
+  FutureOr<void> _onGetMovieSuggestionClear(
+    OnGetMovieSuggestionClear event,
+    Emitter<MovieSuggestionState> emit,
+  ) {
+    _suggestionMovies.clear();
   }
 }

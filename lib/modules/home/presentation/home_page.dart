@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
       const OnGetPopularTvShow(1),
     );
     BlocProvider.of<GetTrendingBloc>(context).add(
-      const OnGetTrending('all'),
+      const OnGetTrending('movie'),
     );
     BlocProvider.of<TopRatedMoviesBloc>(context).add(
       const OnGetTopRatedMovies(1),
@@ -86,7 +86,29 @@ class _HomePageState extends State<HomePage> {
                     return Text(state.message);
                   }
                   if (state is GetTrendingLoading) {
-                    return const CircularProgressIndicator();
+                    return Shimmer.fromColors(
+                      baseColor: AppColors.gray,
+                      highlightColor: AppColors.white,
+                      child: CarouselSlider.builder(
+                        itemCount: 10,
+                        itemBuilder: (context, index, realIndex) {
+                          return AppPadding(
+                            horizontal: 5,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: AppColors.white,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                          );
+                        },
+                        options: CarouselOptions(
+                          autoPlay: true,
+                          viewportFraction: 0.9,
+                          aspectRatio: 2.5,
+                        ),
+                      ),
+                    );
                   }
                   if (state is GetTrendingLoaded) {
                     final trending = state.trendingResult;
@@ -119,11 +141,11 @@ class _HomePageState extends State<HomePage> {
                                 color: Colors.black.withOpacity(0.6),
                                 borderRadius: BorderRadius.circular(6),
                               ),
-                              // alignment: Alignment.center,
-
                               child: Text(
                                 trending[index].title ?? '',
-                                style: Theme.of(context).textTheme.titleMedium,
+                                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                      color: AppColors.white,
+                                    ),
                               ),
                             ),
                           ),
@@ -139,18 +161,37 @@ class _HomePageState extends State<HomePage> {
                   return const SizedBox();
                 },
               ),
-              const SizedBox(height: 10),
               AppPadding(
-                child: Text(
-                  'Upcoming Movies',
-                  style: Theme.of(context).textTheme.titleLarge,
+                child: GestureDetector(
+                  onTap: () => GoRouter.of(context).pushNamed(
+                    ShowAllMovieSeries.routeName,
+                    queryParams: {
+                      'title': 'Upcoming Movies',
+                    },
+                  ),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Upcoming Movies',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      CustomIconWidget(
+                        icon: Icons.arrow_forward_sharp,
+                        onPressed: () => GoRouter.of(context).pushNamed(
+                          ShowAllMovieSeries.routeName,
+                          queryParams: {
+                            'title': 'Upcoming Movies',
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              const SizedBox(height: 10),
               BlocBuilder<UpcomingMoviesBloc, UpcomingMoviesState>(
                 builder: (context, state) {
                   if (state is UpcomingMoviesLoading) {
-                    return const CircularProgressIndicator();
+                    return const ShimmerLoading();
                   }
                   if (state is UpcomingMoviesLoaded) {
                     final upcomingMovie = state.upComingMovies;
@@ -180,18 +221,37 @@ class _HomePageState extends State<HomePage> {
                   );
                 },
               ),
-              const SizedBox(height: 10),
               AppPadding(
-                child: Text(
-                  'In Theater',
-                  style: Theme.of(context).textTheme.titleLarge,
+                child: GestureDetector(
+                  onTap: () => GoRouter.of(context).pushNamed(
+                    ShowAllMovieSeries.routeName,
+                    queryParams: {
+                      'title': 'In Theater',
+                    },
+                  ),
+                  child: Row(
+                    children: [
+                      Text(
+                        'In Theater',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      CustomIconWidget(
+                        icon: Icons.arrow_forward_sharp,
+                        onPressed: () => GoRouter.of(context).pushNamed(
+                          ShowAllMovieSeries.routeName,
+                          queryParams: {
+                            'title': 'In Theater',
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              const SizedBox(height: 10),
               BlocBuilder<NowPlayingMoviesBloc, NowPlayingMoviesState>(
                 builder: (context, state) {
                   if (state is NowPlayingMoviesLoading) {
-                    return const CircularProgressIndicator();
+                    return const ShimmerLoading();
                   }
                   if (state is NowPlayingMoviesFailed) {
                     return Text(state.message);
@@ -221,18 +281,37 @@ class _HomePageState extends State<HomePage> {
                   return const Text(AppData.somethingWentWrong);
                 },
               ),
-              const SizedBox(height: 10),
               AppPadding(
-                child: Text(
-                  'Popular Movies',
-                  style: Theme.of(context).textTheme.titleLarge,
+                child: GestureDetector(
+                  onTap: () => GoRouter.of(context).pushNamed(
+                    ShowAllMovieSeries.routeName,
+                    queryParams: {
+                      'title': 'Popular Movies',
+                    },
+                  ),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Popular Movies',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      CustomIconWidget(
+                        icon: Icons.arrow_forward_sharp,
+                        onPressed: () => GoRouter.of(context).pushNamed(
+                          ShowAllMovieSeries.routeName,
+                          queryParams: {
+                            'title': 'Popular Movies',
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              const SizedBox(height: 10),
               BlocBuilder<PopularMoviesBloc, PopularMoviesState>(
                 builder: (context, state) {
                   if (state is PopularMoviesLoading) {
-                    return const CircularProgressIndicator();
+                    return const ShimmerLoading();
                   }
                   if (state is PopularMoviesFailure) {
                     return Text(state.message);
@@ -260,18 +339,37 @@ class _HomePageState extends State<HomePage> {
                   }
                 },
               ),
-              const SizedBox(height: 10),
               AppPadding(
-                child: Text(
-                  'Popular Series',
-                  style: Theme.of(context).textTheme.titleLarge,
+                child: GestureDetector(
+                  onTap: () => GoRouter.of(context).pushNamed(
+                    ShowAllMovieSeries.routeName,
+                    queryParams: {
+                      'title': 'Popular Series',
+                    },
+                  ),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Popular Series',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      CustomIconWidget(
+                        icon: Icons.arrow_forward_sharp,
+                        onPressed: () => GoRouter.of(context).pushNamed(
+                          ShowAllMovieSeries.routeName,
+                          queryParams: {
+                            'title': 'Popular Series',
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              const SizedBox(height: 10),
               BlocBuilder<PopularTvShowsBloc, PopularTvShowsState>(
                 builder: (context, state) {
                   if (state is PopularTvShowsLoading) {
-                    return const CircularProgressIndicator();
+                    return const ShimmerLoading();
                   }
                   if (state is PopularTvShowsFailed) {
                     return Text(state.message);
@@ -299,21 +397,40 @@ class _HomePageState extends State<HomePage> {
                   return const Text(AppData.somethingWentWrong);
                 },
               ),
-              const SizedBox(height: 10),
               AppPadding(
-                child: Text(
-                  'Top Rated Movies',
-                  style: Theme.of(context).textTheme.titleLarge,
+                child: GestureDetector(
+                  onTap: () => GoRouter.of(context).pushNamed(
+                    ShowAllMovieSeries.routeName,
+                    queryParams: {
+                      'title': 'Top Rated Movies',
+                    },
+                  ),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Top Rated Movies',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      CustomIconWidget(
+                        icon: Icons.arrow_forward_sharp,
+                        onPressed: () => GoRouter.of(context).pushNamed(
+                          ShowAllMovieSeries.routeName,
+                          queryParams: {
+                            'title': 'Top Rated Movies',
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              const SizedBox(height: 10),
               BlocBuilder<TopRatedMoviesBloc, TopRatedMoviesState>(
                 builder: (context, state) {
                   if (state is TopRatedMoviesFailed) {
                     return Text(state.message);
                   }
                   if (state is TopRatedMoviesLoading) {
-                    return const CircularProgressIndicator();
+                    return const ShimmerLoading();
                   }
                   if (state is TopRatedMoviesLoaded) {
                     final topRatedMovies = state.topRatedMovies;
@@ -338,21 +455,40 @@ class _HomePageState extends State<HomePage> {
                   return const Text(AppData.somethingWentWrong);
                 },
               ),
-              const SizedBox(height: 10),
               AppPadding(
-                child: Text(
-                  'Top Rated Series',
-                  style: Theme.of(context).textTheme.titleLarge,
+                child: GestureDetector(
+                  onTap: () => GoRouter.of(context).pushNamed(
+                    ShowAllMovieSeries.routeName,
+                    queryParams: {
+                      'title': 'Top Rated Series',
+                    },
+                  ),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Top Rated Series',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      CustomIconWidget(
+                        icon: Icons.arrow_forward_sharp,
+                        onPressed: () => GoRouter.of(context).pushNamed(
+                          ShowAllMovieSeries.routeName,
+                          queryParams: {
+                            'title': 'Top Rated Series',
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              const SizedBox(height: 10),
               BlocBuilder<TopRatedTvShowBloc, TopRatedTvShowState>(
                 builder: (context, state) {
                   if (state is TopRatedTvShowFailed) {
                     return Text(state.message);
                   }
                   if (state is TopRatedTvShowLoading) {
-                    return const CircularProgressIndicator();
+                    return const ShimmerLoading();
                   }
                   if (state is TopRatedTvShowLoaded) {
                     final topRatedTvShow = state.topRatedTvShow;

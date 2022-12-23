@@ -28,8 +28,12 @@ class _AppIndex extends StatelessWidget {
       builder: (context, state) {
         return MaterialApp.router(
           theme: ThemeData(
-            appBarTheme: const AppBarTheme(
+            appBarTheme: AppBarTheme(
               elevation: 0,
+              titleSpacing: 0,
+              centerTitle: true,
+              backgroundColor: AppColors.white,
+              titleTextStyle: Theme.of(context).textTheme.headlineLarge,
             ),
             colorScheme: const ColorScheme.light(
               primary: Color(0xff51A8DE),
@@ -39,9 +43,17 @@ class _AppIndex extends StatelessWidget {
             bottomNavigationBarTheme: const BottomNavigationBarThemeData(
               backgroundColor: Colors.white,
             ),
-            textTheme: _textTheme(),
+            textTheme: _textThemeLightMode(),
+            iconTheme: const IconThemeData(color: AppColors.red),
           ),
           darkTheme: ThemeData(
+            appBarTheme: AppBarTheme(
+              elevation: 0,
+              titleSpacing: 0,
+              backgroundColor: AppColors.black,
+              centerTitle: true,
+              titleTextStyle: Theme.of(context).textTheme.headlineLarge,
+            ),
             scaffoldBackgroundColor: AppColors.black,
             colorScheme: const ColorScheme.dark(
               primary: AppColors.red,
@@ -52,6 +64,8 @@ class _AppIndex extends StatelessWidget {
               unselectedItemColor: Colors.grey,
             ),
             textTheme: _textTheme(),
+            iconTheme: const IconThemeData(color: AppColors.red),
+            dividerColor: AppColors.gray,
           ),
           themeMode: state,
           localizationsDelegates: const [
@@ -89,8 +103,45 @@ class _AppIndex extends StatelessWidget {
       ),
       labelMedium: GoogleFonts.quicksand(
         fontWeight: FontWeight.bold,
-        fontSize: 10,
+        fontSize: 14,
+        height: 1.5,
         color: AppColors.white,
+      ),
+      labelLarge: GoogleFonts.quicksand(
+        fontSize: 11,
+        color: AppColors.gray,
+        // fontWeight: FontWeight.bold,
+      ),
+    );
+  }
+
+  TextTheme _textThemeLightMode() {
+    return TextTheme(
+      headlineLarge: GoogleFonts.quicksand(
+        fontWeight: FontWeight.bold,
+        fontSize: 22,
+      ),
+      titleLarge: GoogleFonts.quicksand(
+        color: AppColors.red,
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+      ),
+      titleMedium: GoogleFonts.quicksand(
+        color: AppColors.black,
+        fontSize: 10,
+        // fontWeight: FontWeight.bold,
+      ),
+      bodyMedium: GoogleFonts.quicksand(
+        color: AppColors.black,
+        fontSize: 10,
+        letterSpacing: 2,
+        height: 2,
+      ),
+      labelMedium: GoogleFonts.quicksand(
+        fontWeight: FontWeight.bold,
+        fontSize: 14,
+        height: 1.5,
+        color: AppColors.black,
       ),
       labelLarge: GoogleFonts.quicksand(
         fontSize: 11,

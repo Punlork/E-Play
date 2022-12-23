@@ -21,10 +21,10 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   final List<SettingsModel> _model = [
-    SettingsModel(name: 'Favorite', icon: Icons.favorite_border),
-    SettingsModel(name: 'Downloads', icon: Icons.download),
+    // SettingsModel(name: 'Favorite', icon: Icons.favorite_border),
+    // SettingsModel(name: 'Downloads', icon: Icons.download),
     SettingsModel(name: 'About', icon: Icons.error),
-    SettingsModel(name: 'Liences', icon: Icons.description),
+    // SettingsModel(name: 'Liences', icon: Icons.description),
   ];
 
   final bool _isEnable = false;
@@ -48,7 +48,7 @@ class _SettingsPageState extends State<SettingsPage> {
             children: List.generate(
               _model.length,
               (index) {
-                if (index == 2) {
+                if (index == 0) {
                   return Column(
                     children: [
                       SwitchListTile.adaptive(

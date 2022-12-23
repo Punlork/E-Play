@@ -12,3 +12,15 @@ class OnGetMovieSuggestion extends MovieSuggestionEvent {
 
   final int movieId;
 }
+
+class OnGetMovieSuggestionNext extends MovieSuggestionEvent {
+  const OnGetMovieSuggestionNext({
+    required this.movieId,
+    required this.pageNumber,
+  });
+
+  final int movieId;
+  final int pageNumber;
+}
+
+class OnGetMovieSuggestionClear extends MovieSuggestionEvent {}

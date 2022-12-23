@@ -1,4 +1,3 @@
-import 'package:e_book_app/modules/explore/presentation/explore_page.dart';
 import 'package:e_book_app/modules/home/presentation/home_page.dart';
 import 'package:e_book_app/modules/setting/presentation/settings_page.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +22,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   var _selectedIndex = 0;
-  bool _isBacktoTop = false;
+  bool _isBackToTop = false;
 
   late final ScrollController _scrollController;
 
@@ -34,19 +33,19 @@ class _MainPageState extends State<MainPage> {
     _scrollController.addListener(_scrollListener);
   }
 
-  bool get isBacktoTop => _isBacktoTop;
+  bool get isBackToTop => _isBackToTop;
 
   static final List<Widget> _pages = [
     const HomePage(),
-    const ExplorePage(),
+    // const ExplorePage(),
     const SettingsPage(),
   ];
 
   void _scrollListener() {
     if (_selectedIndex == 1 && _scrollController.offset > 300) {
-      _isBacktoTop = true;
+      _isBackToTop = true;
     } else {
-      _isBacktoTop = false;
+      _isBackToTop = false;
     }
   }
 
@@ -80,11 +79,11 @@ class _MainPageState extends State<MainPage> {
               activeIcon: FaIcon(FontAwesomeIcons.houseChimneyWindow),
               label: 'Home',
             ),
-            BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.compass),
-              activeIcon: FaIcon(FontAwesomeIcons.solidCompass),
-              label: 'Explore',
-            ),
+            // BottomNavigationBarItem(
+            //   icon: FaIcon(FontAwesomeIcons.compass),
+            //   activeIcon: FaIcon(FontAwesomeIcons.solidCompass),
+            //   label: 'Explore',
+            // ),
             BottomNavigationBarItem(
               icon: FaIcon(FontAwesomeIcons.gear),
               activeIcon: FaIcon(FontAwesomeIcons.gears),
