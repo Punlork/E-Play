@@ -55,7 +55,7 @@ class NowPlayMoviesModelResults {
     video = json['video'];
     voteAverage = json['vote_average'];
   }
-  late final String posterPath;
+  late final String? posterPath;
   late final bool adult;
   late final String overview;
   late final String releaseDate;
@@ -64,8 +64,8 @@ class NowPlayMoviesModelResults {
   late final String originalTitle;
   late final String originalLanguage;
   late final String title;
-  late final String backdropPath;
-  late final double popularity;
+  late final String? backdropPath;
+  late final num popularity;
   late final int voteCount;
   late final bool video;
   late final num? voteAverage;

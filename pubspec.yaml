@@ -26,6 +26,7 @@ dependencies:
   intl: ^0.17.0
   shared_preferences: ^2.0.15
   shimmer: ^2.0.0
+  stream_transform: ^2.1.0
   url_launcher: ^6.1.6
   youtube_player_flutter: ^8.1.1
 

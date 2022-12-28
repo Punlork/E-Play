@@ -32,9 +32,10 @@ class HomeDetailPage extends StatefulWidget {
 }
 
 class _HomeDetailPageState extends State<HomeDetailPage> {
-  int movieIndex = 1;
+  int movieIndex = 2;
   String _title = '';
   String videoId = '';
+  PaginateStatus _status = PaginateStatus.initial;
   late ScrollController _scrollController;
   late YoutubePlayerController _youtubePlayerController;
   bool _showTitle = false;
@@ -42,7 +43,6 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
   @override
   void initState() {
     super.initState();
-    log(widget.movieId);
     _scrollController = ScrollController();
     _youtubePlayerController = YoutubePlayerController(
       initialVideoId: videoId,
@@ -50,26 +50,39 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
         forceHD: true,
       ),
     );
-    _scrollController.addListener(() {
-      if (_scrollController.offset > 100) {
-        _showTitle = true;
-        setState(() {});
-      } else {
-        _showTitle = false;
-        setState(() {});
-      }
-
-      if (_scrollController.offset == _scrollController.position.maxScrollExtent) {
-        BlocProvider.of<MovieSuggestionBloc>(context).add(
-          OnGetMovieSuggestionNext(
-            movieId: int.parse(widget.movieId),
-            pageNumber: movieIndex = movieIndex + 1,
-          ),
-        );
-        log('${movieIndex}');
-      }
-    });
+    _scrollController.addListener(_scrollListener);
     _onInit();
+  }
+
+  @override
+  void didChangeDependencies() {
+    BlocProvider.of<MovieSuggestionBloc>(context).add(
+      OnGetMovieSuggestionClear(),
+    );
+    super.didChangeDependencies();
+  }
+
+  void _scrollListener() {
+    final offset = _scrollController.offset;
+    final maxExtent = _scrollController.position.maxScrollExtent;
+
+    if (offset > 100) {
+      _showTitle = true;
+      setState(() {});
+    } else {
+      _showTitle = false;
+      setState(() {});
+    }
+
+    if (offset == maxExtent && _status != PaginateStatus.empty) {
+      BlocProvider.of<MovieSuggestionBloc>(context).add(
+        OnGetMovieSuggestionNext(
+          movieId: int.parse(widget.movieId),
+          pageNumber: movieIndex,
+        ),
+      );
+      movieIndex += 1;
+    }
   }
 
   void _onInit() {
@@ -88,14 +101,6 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
     );
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    BlocProvider.of<MovieSuggestionBloc>(context).add(
-      OnGetMovieSuggestionClear(),
-    );
-  }
-
   String _getTimeString(int value) {
     final hour = value ~/ 60;
     final minutes = value % 60;
@@ -106,6 +111,13 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
   Widget build(BuildContext context) {
     return MultiBlocListener(
       listeners: [
+        BlocListener<MovieSuggestionBloc, MovieSuggestionState>(
+          listener: (context, state) {
+            if (state is MovieSuggestionLoaded) {
+              _status = state.status;
+            }
+          },
+        ),
         BlocListener<MovieDetailBloc, MovieDetailState>(
           listener: (context, state) {
             if (state is MovieDetailLoaded) {
@@ -126,9 +138,7 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
           listener: (context, state) {
             if (state is GetVideoInfoLoaded) {
               final videoOfficialId = state.videoInfo
-                  .where(
-                    (element) => element.official == true && element.type == 'Trailer',
-                  )
+                  .where((element) => element.official == true && element.type == 'Trailer')
                   .toList();
               videoId = videoOfficialId.first.key;
               setState(() {});
@@ -359,6 +369,36 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
                                           return Center(child: Text(state.message));
                                         }
                                         if (state is MovieSuggestionLoaded) {
+                                          final listOfSuggestionMovies = <Widget>[];
+
+                                          for (final element in state.movieSuggestion) {
+                                            listOfSuggestionMovies.add(
+                                              Container(
+                                                margin: const EdgeInsets.symmetric(
+                                                  vertical: 10,
+                                                ),
+                                                height: 150,
+                                                child: GestureDetector(
+                                                  onTap: () => GoRouter.of(context).pushNamed(
+                                                    HomeDetailPage.routeName,
+                                                    queryParams: {
+                                                      'movie_id': element.id.toString(),
+                                                    },
+                                                  ),
+                                                  child: BookItemCard(
+                                                    description: element.overview,
+                                                    isRRated: element.adult,
+                                                    imgUrl: element.posterPath ??
+                                                        element.backdropPath ??
+                                                        '',
+                                                    producer: element.voteAverage.toString(),
+                                                    title: element.title,
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          }
+
                                           return Column(
                                             crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
@@ -372,44 +412,34 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
                                               ),
                                               const Divider(thickness: 2),
                                               if (state.movieSuggestion.isNotEmpty) ...[
-                                                ...List.generate(
-                                                  state.movieSuggestion.length,
-                                                  (index) {
-                                                    final movie = state.movieSuggestion[index];
-                                                    return Container(
-                                                      margin: const EdgeInsets.symmetric(
-                                                        vertical: 10,
-                                                      ),
-                                                      height: 150,
-                                                      child: GestureDetector(
-                                                        onTap: () => GoRouter.of(context).pushNamed(
-                                                          HomeDetailPage.routeName,
-                                                          queryParams: {
-                                                            'movie_id': movie.id.toString(),
-                                                          },
+                                                ListView.builder(
+                                                  shrinkWrap: true,
+                                                  physics: const NeverScrollableScrollPhysics(),
+                                                  itemBuilder: (context, index) {
+                                                    if (index >= state.movieSuggestion.length) {
+                                                      return const Center(
+                                                        child: SizedBox(
+                                                          width: 24,
+                                                          height: 24,
+                                                          child: CircularProgressIndicator(),
                                                         ),
-                                                        child: BookItemCard(
-                                                          description: movie.overview,
-                                                          isRRated: movie.adult,
-                                                          imgUrl: movie.posterPath ??
-                                                              movie.backdropPath ??
-                                                              '',
-                                                          producer: movie.voteAverage.toString(),
-                                                          title: movie.title,
-                                                        ),
-                                                      ),
-                                                    );
+                                                      );
+                                                    } else {
+                                                      return listOfSuggestionMovies[index];
+                                                    }
                                                   },
+                                                  itemCount: state.hasReachLimit
+                                                      ? listOfSuggestionMovies.length
+                                                      : listOfSuggestionMovies.length + 1,
                                                 ),
-                                                const SizedBox(height: 10),
-                                                if (state.status == PaginateStatus.loading)
-                                                  const CircularProgressIndicator(),
                                                 if (state.status == PaginateStatus.empty)
-                                                  Text(
-                                                    'No more suggestion',
-                                                    style: Theme.of(context).textTheme.labelMedium,
+                                                  AppPadding(
+                                                    bottom: 20,
+                                                    child: Text(
+                                                      'No more suggestion',
+                                                      style: Theme.of(context).textTheme.titleLarge,
+                                                    ),
                                                   ),
-                                                const SizedBox(height: 10),
                                               ] else
                                                 Center(
                                                   child: Text(
@@ -421,9 +451,7 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
                                           );
                                         }
                                         return const Center(
-                                          child: Text(
-                                            AppData.somethingWentWrong + 'MovieSuggestionBloc',
-                                          ),
+                                          child: Text(AppData.somethingWentWrong),
                                         );
                                       },
                                     )

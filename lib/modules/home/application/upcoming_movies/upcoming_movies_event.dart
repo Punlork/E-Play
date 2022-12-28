@@ -8,7 +8,11 @@ abstract class UpcomingMoviesEvent extends Equatable {
 }
 
 class OnGetUpcomingMovies extends UpcomingMoviesEvent {
-  const OnGetUpcomingMovies(this.pageNumber);
+  const OnGetUpcomingMovies();
+}
+
+class OnGetUpcomingMoviesPaginate extends UpcomingMoviesEvent {
+  const OnGetUpcomingMoviesPaginate(this.pageNumber);
 
   final int pageNumber;
 }

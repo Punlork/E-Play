@@ -10,3 +10,12 @@ enum PaginateStatus {
   empty,
   failed,
 }
+
+enum ShowAllStatus{
+  upcomingMovies,
+  inTheater,
+  popularSeries,
+  popularMovies,
+  topRatedMovies,
+  topRatedSeries,
+}

@@ -50,11 +50,17 @@ class MovieSuggestionBloc extends Bloc<MovieSuggestionEvent, MovieSuggestionStat
           emit(
             stateLoaded.copyWith(
               status: PaginateStatus.loaded,
+              hasReachLimit: false,
               movieSuggestion: _suggestionMovies,
             ),
           );
         } else {
-          emit(stateLoaded.copyWith(status: PaginateStatus.empty));
+          emit(
+            stateLoaded.copyWith(
+              status: PaginateStatus.empty,
+              hasReachLimit: true,
+            ),
+          );
         }
       },
     );
