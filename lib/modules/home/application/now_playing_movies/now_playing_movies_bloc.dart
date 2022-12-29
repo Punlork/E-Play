@@ -50,10 +50,14 @@ class NowPlayingMoviesBloc extends Bloc<NowPlayingMoviesEvent, NowPlayingMoviesS
             stateLoaded.copyWith(
               status: PaginateStatus.loaded,
               nowPlayingMovies: _listNowPlaying,
+              hasReachLimit: false,
             ),
           );
         } else {
-          emit(stateLoaded.copyWith(status: PaginateStatus.empty));
+          emit(stateLoaded.copyWith(
+            status: PaginateStatus.empty,
+            hasReachLimit: true,
+          ));
         }
       },
     );

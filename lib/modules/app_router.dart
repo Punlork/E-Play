@@ -12,5 +12,7 @@ final appRouter = GoRouter(
     ShowAllMovieSeries.route,
     SettingsPage.route,
     HomeTvShowDetailPage.route,
+    UpcomingMovieShowAll.route,
+    PopularMovieShowAll.route,
   ],
 );

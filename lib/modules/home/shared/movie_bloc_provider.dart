@@ -51,4 +51,7 @@ List<BlocProvider> movieBlocProvider = [
   BlocProvider<TvShowReviewsBloc>(
     create: (context) => getIt<TvShowReviewsBloc>(),
   ),
+  BlocProvider<ShowAllBloc>(
+    create: (context) => getIt<ShowAllBloc>(),
+  ),
 ];

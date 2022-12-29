@@ -5,29 +5,29 @@ import 'package:e_book_app/index.dart';
 class ShowAllMovieSeries extends StatefulWidget {
   const ShowAllMovieSeries({
     super.key,
-    required this.status,
+    required this.url,
     required this.title,
   });
 
   static const String routeName = 'show_all_movie_series';
   static const String routePath = '/show_all_movie_series';
 
-  final ShowAllStatus status;
+  final String url;
   final String title;
 
   static final GoRoute route = GoRoute(
     name: routeName,
     path: routePath,
     builder: (context, state) => ShowAllMovieSeries(
-      status: state.extra! as ShowAllStatus,
       title: state.queryParams['title'] ?? '',
+      url: state.queryParams['url'] ?? '',
     ),
     pageBuilder: (context, state) => AppRouteTransition<ShowAllMovieSeries>(
       context: context,
       state: state,
       child: ShowAllMovieSeries(
-        status: state.extra! as ShowAllStatus,
         title: state.queryParams['title'] ?? '',
+        url: state.queryParams['url'] ?? '',
       ),
     ),
   );
@@ -37,101 +37,53 @@ class ShowAllMovieSeries extends StatefulWidget {
 }
 
 class _ShowAllMovieSeriesState extends State<ShowAllMovieSeries> {
-  int pageNumber = 1;
   late ScrollController _scrollController;
   bool _isShowButton = false;
   PaginateStatus status = PaginateStatus.initial;
 
-  ShowAllStatus get _status => widget.status;
-
   @override
   void initState() {
-    _scrollController = ScrollController()..addListener(_scrollListener);
-    switch (_status) {
-      case ShowAllStatus.upcomingMovies:
-        return BlocProvider.of<UpcomingMoviesBloc>(context).add(
-          const OnGetUpcomingMovies(),
-        );
-      case ShowAllStatus.inTheater:
-        return BlocProvider.of<NowPlayingMoviesBloc>(context).add(
-          const OnGetNowPlayingMovies(),
-        );
-      case ShowAllStatus.popularMovies:
-        return BlocProvider.of<UpcomingMoviesBloc>(context).add(
-          const OnGetUpcomingMovies(),
-        );
-      case ShowAllStatus.popularSeries:
-        return BlocProvider.of<UpcomingMoviesBloc>(context).add(
-          const OnGetUpcomingMovies(),
-        );
-      case ShowAllStatus.topRatedMovies:
-        return BlocProvider.of<UpcomingMoviesBloc>(context).add(
-          const OnGetUpcomingMovies(),
-        );
-      case ShowAllStatus.topRatedSeries:
-        return BlocProvider.of<UpcomingMoviesBloc>(context).add(
-          const OnGetUpcomingMovies(),
-        );
-      default:
-    }
-
     super.initState();
+    _scrollController = ScrollController()..addListener(_scrollListener);
+    BlocProvider.of<ShowAllBloc>(context).add(
+      ShowAllFetched(widget.url),
+    );
   }
 
   @override
   void dispose() {
-    super.dispose();
+    pageNumber = 1;
     _scrollController
       ..removeListener(_scrollListener)
       ..dispose();
+    super.dispose();
   }
 
   void _scrollListener() {
-    final maxExtent = _scrollController.position.maxScrollExtent;
+    final maxScroll = _scrollController.position.atEdge;
     final currentPosition = _scrollController.offset;
 
     if (currentPosition > 300) {
-      _isShowButton = true;
-      setState(() {});
+      if (!_isShowButton) {
+        _isShowButton = true;
+        setState(() {});
+      }
     } else {
-      _isShowButton = false;
-      setState(() {});
+      if (_isShowButton) {
+        _isShowButton = false;
+        setState(() {});
+      }
     }
 
-    if (currentPosition == maxExtent && status != PaginateStatus.empty) {
-      _getPaginate();
-    }
-  }
-
-  void _getPaginate() {
-    pageNumber += 1;
-    log('$pageNumber');
-    switch (widget.status) {
-      case ShowAllStatus.upcomingMovies:
-        return BlocProvider.of<UpcomingMoviesBloc>(context).add(
-          OnGetUpcomingMoviesPaginate(pageNumber),
-        );
-      case ShowAllStatus.inTheater:
-        return BlocProvider.of<NowPlayingMoviesBloc>(context).add(
-          OnGetNowPlayingMoviesPaginate(pageNumber),
-        );
-      case ShowAllStatus.popularMovies:
-        return BlocProvider.of<UpcomingMoviesBloc>(context).add(
-          OnGetUpcomingMoviesPaginate(pageNumber),
-        );
-      case ShowAllStatus.popularSeries:
-        return BlocProvider.of<UpcomingMoviesBloc>(context).add(
-          OnGetUpcomingMoviesPaginate(pageNumber),
-        );
-      case ShowAllStatus.topRatedMovies:
-        return BlocProvider.of<UpcomingMoviesBloc>(context).add(
-          OnGetUpcomingMoviesPaginate(pageNumber),
-        );
-      case ShowAllStatus.topRatedSeries:
-        return BlocProvider.of<UpcomingMoviesBloc>(context).add(
-          OnGetUpcomingMoviesPaginate(pageNumber),
-        );
-      default:
+    if (maxScroll && status != PaginateStatus.empty) {
+      pageNumber += 1;
+      log('$pageNumber');
+      BlocProvider.of<ShowAllBloc>(context).add(
+        ShowAllFetchedPaginate(
+          pageNumber: pageNumber,
+          url: widget.url,
+        ),
+      );
     }
   }
 
@@ -139,23 +91,12 @@ class _ShowAllMovieSeriesState extends State<ShowAllMovieSeries> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocListener(
-      listeners: [
-        BlocListener<UpcomingMoviesBloc, UpcomingMoviesState>(
-          listener: (context, state) {
-            if (state is UpcomingMoviesLoaded) {
-              status = state.status;
-            }
-          },
-        ),
-        BlocListener<NowPlayingMoviesBloc, NowPlayingMoviesState>(
-          listener: (context, state) {
-            if (state is NowPlayingMoviesLoaded) {
-              status = state.status;
-            }
-          },
-        ),
-      ],
+    return BlocListener<ShowAllBloc, ShowAllState>(
+      listener: (context, state) {
+        if (state is ShowAllLoaded) {
+          status = state.status;
+        }
+      },
       child: Scaffold(
         appBar: AppBar(
           centerTitle: false,
@@ -176,21 +117,56 @@ class _ShowAllMovieSeriesState extends State<ShowAllMovieSeries> {
         body: AppPadding(
           child: SingleChildScrollView(
             controller: _scrollController,
-            child: Column(
-              children: [
-                if (_status == ShowAllStatus.upcomingMovies) ...[
-                  UpcomingMovieShowAll(isGrid: _isGrid)
-                ],
-                if (_status == ShowAllStatus.inTheater) ...[
-                  NowPlayingMoviesShowAll(isGrid: _isGrid),
-                ],
-                if (_status == ShowAllStatus.upcomingMovies) ...[
-                  UpcomingMovieShowAll(isGrid: _isGrid)
-                ],
-                if (_status == ShowAllStatus.upcomingMovies) ...[
-                  UpcomingMovieShowAll(isGrid: _isGrid)
-                ],
-              ],
+            child: Center(
+              child: BlocBuilder<ShowAllBloc, ShowAllState>(
+                builder: (context, state) {
+                  if (state is ShowAllFailed) {
+                    return const Text(AppData.somethingWentWrong);
+                  }
+                  if (state is ShowAllLoading) {
+                    return const CircularProgressIndicator();
+                  }
+                  if (state is ShowAllLoaded) {
+                    final listOfShowAll = <Widget>[];
+
+                    for (final element in state.showAll) {
+                      listOfShowAll.add(
+                        MoviesTvShowCardBox(
+                          type: DetailType.movie,
+                          id: '${element.id}',
+                          imgUrl: element.posterPath,
+                          title: element.title,
+                          rating: element.popularity,
+                        ),
+                      );
+                    }
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: _isGrid ? 3 : 1,
+                            childAspectRatio: .75,
+                            mainAxisSpacing: 15,
+                          ),
+                          itemBuilder: (context, index) => index >= state.showAll.length
+                              ? const BottomLoader()
+                              : listOfShowAll[index],
+                          itemCount:
+                              state.hasReachLimit ? state.showAll.length : state.showAll.length + 1,
+                        ),
+                        if (state.status == PaginateStatus.empty) ...[
+                          const Text('End'),
+                        ],
+                        const SizedBox(height: 20),
+                      ],
+                    );
+                  }
+                  return const Text(AppData.somethingWentWrong);
+                },
+              ),
             ),
           ),
         ),
@@ -211,122 +187,6 @@ class _ShowAllMovieSeriesState extends State<ShowAllMovieSeries> {
               )
             : null,
       ),
-    );
-  }
-}
-
-class UpcomingMovieShowAll extends StatelessWidget {
-  const UpcomingMovieShowAll({
-    super.key,
-    required bool isGrid,
-  }) : _isGrid = isGrid;
-
-  final bool _isGrid;
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<UpcomingMoviesBloc, UpcomingMoviesState>(
-      builder: (context, state) {
-        if (state is UpcomingMoviesFailed) {
-          return const Text(AppData.somethingWentWrong);
-        }
-        if (state is UpcomingMoviesLoading) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (state is UpcomingMoviesLoaded) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: _isGrid ? 3 : 1,
-                  childAspectRatio: .75,
-                  mainAxisSpacing: 15,
-                ),
-                itemBuilder: (context, index) {
-                  final upcoming = state.upComingMovies[index];
-                  return MoviesTvShowCardBox(
-                    type: DetailType.movie,
-                    id: '${upcoming.id}',
-                    imgUrl: upcoming.posterPath ?? '',
-                    title: upcoming.title,
-                    rating: upcoming.popularity,
-                  );
-                },
-                itemCount: state.upComingMovies.length,
-              ),
-              if (state.status == PaginateStatus.empty) ...[
-                const Text('End'),
-              ],
-              if (state.status == PaginateStatus.loading) ...[
-                const CircularProgressIndicator(),
-              ],
-              const SizedBox(height: 20),
-            ],
-          );
-        }
-        return const Text(AppData.somethingWentWrong);
-      },
-    );
-  }
-}
-
-class NowPlayingMoviesShowAll extends StatelessWidget {
-  const NowPlayingMoviesShowAll({
-    super.key,
-    required bool isGrid,
-  }) : _isGrid = isGrid;
-
-  final bool _isGrid;
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<NowPlayingMoviesBloc, NowPlayingMoviesState>(
-      builder: (context, state) {
-        if (state is NowPlayingMoviesFailed) {
-          return const Text(AppData.somethingWentWrong);
-        }
-        if (state is NowPlayingMoviesLoading) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (state is NowPlayingMoviesLoaded) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: _isGrid ? 3 : 1,
-                  childAspectRatio: .75,
-                  mainAxisSpacing: 15,
-                ),
-                itemBuilder: (context, index) {
-                  final nowPlaying = state.nowPlayingMovies[index];
-                  return MoviesTvShowCardBox(
-                    type: DetailType.movie,
-                    id: '${nowPlaying.id}',
-                    imgUrl: nowPlaying.posterPath ?? nowPlaying.backdropPath ?? '',
-                    title: nowPlaying.title,
-                    rating: nowPlaying.popularity,
-                  );
-                },
-                itemCount: state.nowPlayingMovies.length,
-              ),
-              if (state.status == PaginateStatus.empty) ...[
-                const Text('End'),
-              ],
-              if (state.status == PaginateStatus.loading) ...[
-                const CircularProgressIndicator(),
-              ],
-              const SizedBox(height: 20),
-            ],
-          );
-        }
-        return const Text(AppData.somethingWentWrong);
-      },
     );
   }
 }

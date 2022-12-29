@@ -18,7 +18,7 @@ class AppData {
   }) =>
       '$mainUrl/$movieId/videos?api_key=$apiKey&language=en-US';
 
-  static dynamic popular(String pageNumber) =>
+  static String popular(int pageNumber) =>
       '$mainUrl/popular?api_key=$apiKey&language=en-US&page=$pageNumber';
 
   static dynamic getTrending({required String mediaType}) =>
@@ -36,7 +36,7 @@ class AppData {
   }) =>
       '$mainUrl/$movieId/recommendations?api_key=$apiKey&language=en-US&page=$pageNumber';
 
-  static String getUpcomingMovies({required String pageNumber}) =>
+  static String getUpcomingMovies({required int pageNumber}) =>
       '$mainUrl/upcoming?api_key=$apiKey&language=en-US&page=$pageNumber';
 
   static String getTopRatedMovies({required int pageNumber}) =>

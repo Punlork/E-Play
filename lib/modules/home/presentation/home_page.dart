@@ -33,7 +33,9 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
   }
 
   void onGetMovies() {
-    BlocProvider.of<PopularMoviesBloc>(context).add(OnGetPopularMovies());
+    BlocProvider.of<PopularMoviesBloc>(context).add(
+      OnGetPopularMovies(),
+    );
     BlocProvider.of<UpcomingMoviesBloc>(context).add(
       const OnGetUpcomingMovies(),
     );
@@ -49,7 +51,6 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
     BlocProvider.of<TopRatedMoviesBloc>(context).add(
       const OnGetTopRatedMovies(1),
     );
-
     BlocProvider.of<TopRatedTvShowBloc>(context).add(
       const OnGetTopRatedTvShow(1),
     );
@@ -158,11 +159,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
             AppPadding(
               child: GestureDetector(
                 onTap: () => GoRouter.of(context).pushNamed(
-                  ShowAllMovieSeries.routeName,
-                  queryParams: {
-                    'title': 'Upcoming Movies',
-                  },
-                  extra: ShowAllStatus.upcomingMovies,
+                  UpcomingMovieShowAll.routeName,
                 ),
                 child: Row(
                   children: [
@@ -173,11 +170,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                     CustomIconWidget(
                       icon: Icons.arrow_forward_sharp,
                       onPressed: () => GoRouter.of(context).pushNamed(
-                        ShowAllMovieSeries.routeName,
-                        queryParams: {
-                          'title': 'Upcoming Movies',
-                        },
-                        extra: ShowAllStatus.upcomingMovies,
+                        UpcomingMovieShowAll.routeName,
                       ),
                     ),
                   ],
@@ -283,11 +276,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
             AppPadding(
               child: GestureDetector(
                 onTap: () => GoRouter.of(context).pushNamed(
-                  ShowAllMovieSeries.routeName,
-                  queryParams: {
-                    'title': 'Popular Movies',
-                  },
-                  extra: ShowAllStatus.popularMovies,
+                  PopularMovieShowAll.routeName,
                 ),
                 child: Row(
                   children: [
@@ -298,11 +287,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                     CustomIconWidget(
                       icon: Icons.arrow_forward_sharp,
                       onPressed: () => GoRouter.of(context).pushNamed(
-                        ShowAllMovieSeries.routeName,
-                        queryParams: {
-                          'title': 'Popular Movies',
-                        },
-                        extra: ShowAllStatus.popularMovies,
+                        PopularMovieShowAll.routeName,
                       ),
                     ),
                   ],

@@ -8,3 +8,9 @@ abstract class PopularMoviesEvent extends Equatable {
 }
 
 class OnGetPopularMovies extends PopularMoviesEvent {}
+
+class OnGetPopularMoviesNext extends PopularMoviesEvent {
+  const OnGetPopularMoviesNext(this.pageNumber);
+
+  final int pageNumber;
+}

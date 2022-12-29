@@ -10,6 +10,10 @@ void movieServiceLocator() {
     ..registerLazySingleton<TvShowsRepository>(
       () => TvShowsRepositoryImpl(getIt()),
     )
+    ..registerLazySingleton<ShowAllService>(() => ShowAllService(getIt()))
+    ..registerLazySingleton<ShowAllRepository>(
+      () => ShowAllRepositoryImpl(getIt()),
+    )
     ..registerFactory<MovieDetailBloc>(() => MovieDetailBloc(getIt()))
     ..registerFactory<MovieSuggestionBloc>(() => MovieSuggestionBloc(getIt()))
     ..registerFactory<PopularMoviesBloc>(() => PopularMoviesBloc(getIt()))
@@ -24,5 +28,6 @@ void movieServiceLocator() {
     ..registerFactory<TopRatedMoviesBloc>(() => TopRatedMoviesBloc(getIt()))
     ..registerFactory<TopRatedTvShowBloc>(() => TopRatedTvShowBloc(getIt()))
     ..registerFactory<MovieReviewsBloc>(() => MovieReviewsBloc(getIt()))
-    ..registerFactory<TvShowReviewsBloc>(() => TvShowReviewsBloc(getIt()));
+    ..registerFactory<TvShowReviewsBloc>(() => TvShowReviewsBloc(getIt()))
+    ..registerFactory<ShowAllBloc>(() => ShowAllBloc(getIt()));
 }

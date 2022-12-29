@@ -48,10 +48,14 @@ class UpcomingMoviesBloc extends Bloc<UpcomingMoviesEvent, UpcomingMoviesState> 
             stateLoaded.copyWith(
               status: PaginateStatus.loaded,
               upComingMovies: _upComingMovies,
+              hasReachLimit: false,
             ),
           );
         } else {
-          emit(stateLoaded.copyWith(status: PaginateStatus.empty));
+          emit(stateLoaded.copyWith(
+            status: PaginateStatus.empty,
+            hasReachLimit: true,
+          ));
         }
       },
     );

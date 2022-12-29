@@ -417,13 +417,7 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
                                                   physics: const NeverScrollableScrollPhysics(),
                                                   itemBuilder: (context, index) {
                                                     if (index >= state.movieSuggestion.length) {
-                                                      return const Center(
-                                                        child: SizedBox(
-                                                          width: 24,
-                                                          height: 24,
-                                                          child: CircularProgressIndicator(),
-                                                        ),
-                                                      );
+                                                      return const BottomLoader();
                                                     } else {
                                                       return listOfSuggestionMovies[index];
                                                     }
