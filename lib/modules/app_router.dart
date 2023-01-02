@@ -6,9 +6,9 @@ final appRouter = GoRouter(
   routes: [
     MainPage.route,
     HomePage.route,
+    MovieDetailPage.route,
+    SeriesDetailPage.route,
     HomeDetailPage.route,
-    // ExplorePage.route,
-    // ExploreDetailPage.route,
     ShowAllMovieSeries.route,
     SettingsPage.route,
     HomeTvShowDetailPage.route,

@@ -189,9 +189,9 @@ class _HomeTvShowDetailPageState extends State<HomeTvShowDetailPage> {
                         onPressed: () {
                           if (state != null) {
                             GoRouter.of(context).pop();
-                            BlocProvider.of<MovieDetailBloc>(context).add(
-                              const OnRemoveMovieDetail(),
-                            );
+                            // BlocProvider.of<MovieDetailBloc>(context).add(
+                            //   const OnRemoveMovieDetail(),
+                            // );
                           }
                         },
                       );

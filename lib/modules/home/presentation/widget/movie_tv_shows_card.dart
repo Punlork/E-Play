@@ -10,7 +10,7 @@ class MoviesTvShowCardBox extends StatelessWidget {
     required this.type,
   });
 
-  final String id;
+  final int id;
   final String imgUrl;
   final num? rating;
   final String title;
@@ -22,17 +22,17 @@ class MoviesTvShowCardBox extends StatelessWidget {
       onTap: () {
         if (type == DetailType.movie) {
           GoRouter.of(context).pushNamed(
-            HomeDetailPage.routeName,
+            MovieDetailPage.routeName,
             queryParams: {
-              'movie_id': id,
+              'movie_id': '$id',
             },
           );
         }
         if (type == DetailType.tvShow) {
           GoRouter.of(context).pushNamed(
-            HomeTvShowDetailPage.routeName,
+            SeriesDetailPage.routeName,
             queryParams: {
-              'tv_show_id': id,
+              'tv_show_id': '$id',
             },
           );
         }

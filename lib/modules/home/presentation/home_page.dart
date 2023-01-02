@@ -189,7 +189,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                     child: ListView.builder(
                       itemBuilder: (context, index) => MoviesTvShowCardBox(
                         type: DetailType.movie,
-                        id: upcomingMovie[index].id.toString(),
+                        id: upcomingMovie[index].id,
                         imgUrl: upcomingMovie[index].posterPath ?? '',
                         title: upcomingMovie[index].title,
                         rating: upcomingMovie[index].voteAverage,
@@ -247,7 +247,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                     child: ListView.builder(
                       itemBuilder: (context, index) => MoviesTvShowCardBox(
                         type: DetailType.movie,
-                        id: nowPlaying[index].id.toString(),
+                        id: nowPlaying[index].id,
                         imgUrl:
                             nowPlaying[index].posterPath ?? nowPlaying[index].backdropPath ?? '',
                         title: nowPlaying[index].title,
@@ -300,7 +300,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                     child: ListView.builder(
                       itemBuilder: (context, index) => MoviesTvShowCardBox(
                         type: DetailType.movie,
-                        id: state.popularMovies[index].id.toString(),
+                        id: state.popularMovies[index].id,
                         imgUrl: state.popularMovies[index].posterPath,
                         title: state.popularMovies[index].title,
                         rating: state.popularMovies[index].voteAverage,
@@ -353,7 +353,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                     child: ListView.builder(
                       itemBuilder: (context, index) => MoviesTvShowCardBox(
                         type: DetailType.tvShow,
-                        id: popularTvShows[index].id.toString(),
+                        id: popularTvShows[index].id,
                         imgUrl: popularTvShows[index].posterPath,
                         title: popularTvShows[index].name,
                         rating: popularTvShows[index].voteAverage,
@@ -405,7 +405,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                     child: ListView.builder(
                       itemBuilder: (context, index) => MoviesTvShowCardBox(
                         type: DetailType.movie,
-                        id: topRatedMovies[index].id.toString(),
+                        id: topRatedMovies[index].id,
                         imgUrl: topRatedMovies[index].posterPath,
                         title: topRatedMovies[index].title,
                         rating: topRatedMovies[index].voteAverage,
@@ -457,7 +457,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                     child: ListView.builder(
                       itemBuilder: (context, index) => MoviesTvShowCardBox(
                         type: DetailType.tvShow,
-                        id: topRatedTvShow[index].id.toString(),
+                        id: topRatedTvShow[index].id,
                         imgUrl: topRatedTvShow[index].posterPath,
                         title: topRatedTvShow[index].name,
                         rating: topRatedTvShow[index].voteAverage,

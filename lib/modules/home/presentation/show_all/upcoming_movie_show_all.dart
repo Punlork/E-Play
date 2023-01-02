@@ -12,12 +12,16 @@ class UpcomingMovieShowAll extends StatelessWidget {
     path: routePath,
     name: routeName,
     builder: (context, state) => const UpcomingMovieShowAll(),
+    pageBuilder: (context, state) => AppRouteTransition(
+      context: context,
+      state: state,
+      child: const UpcomingMovieShowAll(),
+    ),
   );
 
   @override
   Widget build(BuildContext context) {
     final url = AppData.getUpcomingMovies;
-
     return ShowAllMovieSeries(
       url: url,
       title: 'Upcoming Movies',

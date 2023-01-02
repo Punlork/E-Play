@@ -41,14 +41,14 @@ class MovieSuggestionResults {
   late final int id;
   late final String title;
   late final String originalLanguage;
-  late final String originalTitle;
+  late final String? originalTitle;
   late final String overview;
   late final String? posterPath;
   late final String mediaType;
   late final List<int> genreIds;
   late final double popularity;
-  late final String releaseDate;
-  late final bool video;
+  late final String? releaseDate;
+  late final bool? video;
   late final num? voteAverage;
   late final int voteCount;
 
@@ -56,7 +56,7 @@ class MovieSuggestionResults {
     adult = json['adult'];
     backdropPath = json['backdrop_path'];
     id = json['id'];
-    title = json['title'];
+    title = json['title'] ?? json['name'];
     originalLanguage = json['original_language'];
     originalTitle = json['original_title'];
     overview = json['overview'];

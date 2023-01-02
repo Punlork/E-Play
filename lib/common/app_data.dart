@@ -14,7 +14,7 @@ class AppData {
   static const String ytTrailerCode = 'https://youtu.be/';
 
   static String getVideoInfo({
-    required int movieId,
+    required String movieId,
   }) =>
       '$mainUrl/$movieId/videos?api_key=$apiKey&language=en-US';
 
@@ -26,50 +26,39 @@ class AppData {
   static String imagePath({required String posterPath}) =>
       'https://image.tmdb.org/t/p/w500$posterPath';
 
-  static String getMovieDetail(String movieId) =>
-      '$mainUrl/$movieId?api_key=$apiKey&language=en-US';
+  static String getMovieDetail(int movieId) => '$mainUrl/$movieId?api_key=$apiKey&language=en-US';
 
   static String getMovieSuggestion({
     required String movieId,
-    required String pageNumber,
   }) =>
-      '$mainUrl/$movieId/recommendations?api_key=$apiKey&language=en-US&page=$pageNumber';
+      '$mainUrl/$movieId/recommendations?api_key=$apiKey&language=en-US&page=';
 
   static String get getUpcomingMovies => '$mainUrl/upcoming?api_key=$apiKey&language=en-US&page=';
 
   static String get getTopRatedMovies => '$mainUrl/top_rated?api_key=$apiKey&language=en-US&page=';
 
-  static String getMovieReviews({
-    required int pageNumber,
-    required int movieId,
-  }) =>
-      '$mainUrl/$movieId/reviews?api_key=$apiKey&language=en-US&page=$pageNumber';
+  static String getMovieReviews({required String movieId}) =>
+      '$mainUrl/$movieId/reviews?api_key=$apiKey&language=en-US&page=';
 
   static String get getNowPlayingMovies =>
       '$mainUrl/now_playing?api_key=$apiKey&language=en-US&page=';
 
   static String get getTVPopularMovies => '$mainUrlTV/popular?api_key=$apiKey&language=en-US&page=';
 
-  static String getTvShowDetail({required int tvShowId}) =>
+  static String getTvShowDetail({required String tvShowId}) =>
       '$mainUrlTV/$tvShowId?api_key=$apiKey&language=en-US';
 
   static String getTvShowVideos({required int tvShowId}) =>
       '$mainUrlTV/$tvShowId/videos?api_key=$apiKey&language=en-US';
 
-  static String getTvShowReviews({
-    required int pageNumber,
-    required int tvShowId,
-  }) =>
-      '$mainUrlTV/$tvShowId/reviews?api_key=$apiKey&language=en-US&page=$pageNumber';
+  static String getTvShowReviews({required String tvShowId}) =>
+      '$mainUrlTV/$tvShowId/reviews?api_key=$apiKey&language=en-US&page=';
 
   static String get getTopRatedTvShow =>
       '$mainUrlTV/top_rated?api_key=$apiKey&language=en-US&page=';
 
-  static String getTvShowSuggestion({
-    required int tvShowId,
-    required int pageNumber,
-  }) =>
-      '$mainUrlTV/$tvShowId/recommendations?api_key=$apiKey&language=en-US&page=$pageNumber';
+  static String getTvShowSuggestion({required String tvShowId}) =>
+      '$mainUrlTV/$tvShowId/recommendations?api_key=$apiKey&language=en-US&page=';
 
   static const String getLatestMovies = '$mainUrl/latest?api_key=$apiKey&language=en-US';
 }

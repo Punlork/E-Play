@@ -10,6 +10,11 @@ class PopularMovieShowAll extends StatelessWidget {
     path: routePath,
     name: routeName,
     builder: (context, state) => const PopularMovieShowAll(),
+    pageBuilder: (context, state) => AppRouteTransition(
+      context: context,
+      state: state,
+      child: const PopularMovieShowAll(),
+    ),
   );
 
   @override

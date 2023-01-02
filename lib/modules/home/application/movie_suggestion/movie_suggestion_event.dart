@@ -8,19 +8,17 @@ abstract class MovieSuggestionEvent extends Equatable {
 }
 
 class OnGetMovieSuggestion extends MovieSuggestionEvent {
-  const OnGetMovieSuggestion(this.movieId);
+  const OnGetMovieSuggestion(this.url);
 
-  final int movieId;
+  final String url;
 }
 
 class OnGetMovieSuggestionNext extends MovieSuggestionEvent {
   const OnGetMovieSuggestionNext({
-    required this.movieId,
     required this.pageNumber,
+    required this.url,
   });
 
-  final int movieId;
+  final String url;
   final int pageNumber;
 }
-
-class OnGetMovieSuggestionClear extends MovieSuggestionEvent {}

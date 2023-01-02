@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:e_book_app/index.dart';
 
 part 'movie_suggestion_event.dart';
@@ -10,7 +11,6 @@ class MovieSuggestionBloc extends Bloc<MovieSuggestionEvent, MovieSuggestionStat
         super(MovieSuggestionInitial()) {
     on<OnGetMovieSuggestion>(_onGetMovieSuggestion);
     on<OnGetMovieSuggestionNext>(_onGetMovieSuggestionNext);
-    on<OnGetMovieSuggestionClear>(_onGetMovieSuggestionClear);
   }
 
   final MovieRepository _movieRepository;
@@ -21,8 +21,9 @@ class MovieSuggestionBloc extends Bloc<MovieSuggestionEvent, MovieSuggestionStat
     OnGetMovieSuggestion event,
     Emitter<MovieSuggestionState> emit,
   ) async {
+    _suggestionMovies.clear();
     emit(MovieSuggestionLoading());
-    final result = await _movieRepository.getMovieSuggestion(movieId: event.movieId);
+    final result = await _movieRepository.getMovieSuggestion(url: event.url);
     result.fold(
       (l) => emit(MovieSuggestionFailed(l)),
       (r) => {
@@ -39,7 +40,7 @@ class MovieSuggestionBloc extends Bloc<MovieSuggestionEvent, MovieSuggestionStat
     final stateLoaded = state as MovieSuggestionLoaded;
     emit(stateLoaded.copyWith(status: PaginateStatus.loading));
     final result = await _movieRepository.getMovieSuggestion(
-      movieId: event.movieId,
+      url: event.url,
       pageNumber: event.pageNumber,
     );
     result.fold(
@@ -64,12 +65,5 @@ class MovieSuggestionBloc extends Bloc<MovieSuggestionEvent, MovieSuggestionStat
         }
       },
     );
-  }
-
-  FutureOr<void> _onGetMovieSuggestionClear(
-    OnGetMovieSuggestionClear event,
-    Emitter<MovieSuggestionState> emit,
-  ) {
-    _suggestionMovies.clear();
   }
 }

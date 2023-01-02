@@ -21,7 +21,9 @@ class BookDescriptionState extends State<BookDescription> {
         children: [
           Text(
             widget._description,
-            style: Theme.of(context).textTheme.labelMedium,
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  color: AppColors.white.withOpacity(.6),
+                ),
             maxLines: isShowMore ? null : 2,
             overflow: isShowMore ? null : TextOverflow.ellipsis,
           ),

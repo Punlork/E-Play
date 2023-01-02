@@ -15,7 +15,7 @@ export 'application/tv_show_suggestion/tv_show_suggestion_bloc.dart';
 export 'application/tv_show_video/tv_show_video_bloc.dart';
 export 'application/upcoming_movies/upcoming_movies_bloc.dart';
 
-export 'domain/movies/movie_detail_model.dart';
+export 'domain/movie_series_detail_model.dart';
 export 'domain/movies/movie_model.dart';
 export 'domain/movies/movie_reviews.dart';
 export 'domain/movies/movie_suggestion_model.dart';
@@ -40,7 +40,9 @@ export 'infrastructure/show_all_service.dart';
 export 'infrastructure/tv_shows_repository.dart';
 export 'infrastructure/tv_shows_service.dart';
 
-export 'presentation/home_movie_detail_page.dart';
+export 'presentation/detail_page/home_movie_detail_page.dart';
+export 'presentation/detail_page/movie_detail_page.dart';
+export 'presentation/detail_page/series_detail_page.dart';
 export 'presentation/home_page.dart';
 export 'presentation/home_tv_show_detail_page.dart';
 

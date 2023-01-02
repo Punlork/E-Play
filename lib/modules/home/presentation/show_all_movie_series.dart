@@ -22,14 +22,6 @@ class ShowAllMovieSeries extends StatefulWidget {
       title: state.queryParams['title'] ?? '',
       url: state.queryParams['url'] ?? '',
     ),
-    pageBuilder: (context, state) => AppRouteTransition<ShowAllMovieSeries>(
-      context: context,
-      state: state,
-      child: ShowAllMovieSeries(
-        title: state.queryParams['title'] ?? '',
-        url: state.queryParams['url'] ?? '',
-      ),
-    ),
   );
 
   @override
@@ -133,13 +125,14 @@ class _ShowAllMovieSeriesState extends State<ShowAllMovieSeries> {
                       listOfShowAll.add(
                         MoviesTvShowCardBox(
                           type: DetailType.movie,
-                          id: '${element.id}',
+                          id: element.id,
                           imgUrl: element.posterPath,
                           title: element.title,
                           rating: element.popularity,
                         ),
                       );
                     }
+
                     return Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [

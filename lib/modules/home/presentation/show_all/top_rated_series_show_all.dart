@@ -10,6 +10,11 @@ class TopRatedSeriesShowAll extends StatelessWidget {
     name: routeName,
     path: routePath,
     builder: (context, state) => const TopRatedSeriesShowAll(),
+    pageBuilder: (context, state) => AppRouteTransition(
+      context: context,
+      state: state,
+      child: const TopRatedSeriesShowAll(),
+    ),
   );
 
   @override

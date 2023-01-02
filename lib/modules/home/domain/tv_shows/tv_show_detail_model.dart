@@ -1,7 +1,7 @@
 class TvShowDetailModel {
   TvShowDetailModel({
     this.backdropPath,
-    this.createdBy,
+    // this.createdBy,
     this.episodeRunTime,
     this.firstAirDate,
     this.genres,
@@ -24,7 +24,7 @@ class TvShowDetailModel {
     this.posterPath,
     this.productionCompanies,
     this.productionCountries,
-    this.seasons,
+    // this.seasons,
     this.spokenLanguages,
     this.status,
     this.tagline,
@@ -34,9 +34,6 @@ class TvShowDetailModel {
   });
   TvShowDetailModel.fromJson(Map<String, dynamic> json)
       : backdropPath = json['backdrop_path'] as String?,
-        createdBy = (json['created_by'] as List?)
-            ?.map((dynamic e) => CreatedBy.fromJson(e as Map<String, dynamic>))
-            .toList(),
         episodeRunTime = (json['episode_run_time'] as List?)?.map((dynamic e) => e as int).toList(),
         firstAirDate = json['first_air_date'] as String?,
         genres = (json['genres'] as List?)
@@ -71,9 +68,6 @@ class TvShowDetailModel {
             ?.map(
                 (dynamic e) => ProductionCountriesTvShowDetail.fromJson(e as Map<String, dynamic>))
             .toList(),
-        seasons = (json['seasons'] as List?)
-            ?.map((dynamic e) => Seasons.fromJson(e as Map<String, dynamic>))
-            .toList(),
         spokenLanguages = (json['spoken_languages'] as List?)
             ?.map((dynamic e) => SpokenLanguagesTvShowDetail.fromJson(e as Map<String, dynamic>))
             .toList(),
@@ -83,7 +77,7 @@ class TvShowDetailModel {
         voteAverage = json['vote_average'] as double?,
         voteCount = json['vote_count'] as int?;
   final String? backdropPath;
-  final List<CreatedBy>? createdBy;
+  // final List<CreatedBy>? createdBy;
   final List<int>? episodeRunTime;
   final String? firstAirDate;
   final List<GenresTvShowDetail>? genres;
@@ -106,7 +100,7 @@ class TvShowDetailModel {
   final String? posterPath;
   final List<ProductionCompaniesTvShowDetail>? productionCompanies;
   final List<ProductionCountriesTvShowDetail>? productionCountries;
-  final List<Seasons>? seasons;
+  // final List<Seasons>? seasons;
   final List<SpokenLanguagesTvShowDetail>? spokenLanguages;
   final String? status;
   final String? tagline;
@@ -115,26 +109,7 @@ class TvShowDetailModel {
   final int? voteCount;
 }
 
-class CreatedBy {
-  CreatedBy({
-    this.id,
-    this.creditId,
-    this.name,
-    this.gender,
-    this.profilePath,
-  });
-  CreatedBy.fromJson(Map<String, dynamic> json)
-      : id = json['id'] as int?,
-        creditId = json['credit_id'] as String?,
-        name = json['name'] as String?,
-        gender = json['gender'] as int?,
-        profilePath = json['profile_path'] as String?;
-  final int? id;
-  final String? creditId;
-  final String? name;
-  final int? gender;
-  final String? profilePath;
-}
+
 
 class GenresTvShowDetail {
   GenresTvShowDetail({
@@ -230,33 +205,6 @@ class ProductionCountriesTvShowDetail {
         name = json['name'] as String?;
   final String? iso31661;
   final String? name;
-}
-
-class Seasons {
-  Seasons({
-    this.airDate,
-    this.episodeCount,
-    this.id,
-    this.name,
-    this.overview,
-    this.posterPath,
-    this.seasonNumber,
-  });
-  Seasons.fromJson(Map<String, dynamic> json)
-      : airDate = json['air_date'] as String?,
-        episodeCount = json['episode_count'] as int?,
-        id = json['id'] as int?,
-        name = json['name'] as String?,
-        overview = json['overview'] as String?,
-        posterPath = json['poster_path'] as String?,
-        seasonNumber = json['season_number'] as int?;
-  final String? airDate;
-  final int? episodeCount;
-  final int? id;
-  final String? name;
-  final String? overview;
-  final String? posterPath;
-  final int? seasonNumber;
 }
 
 class SpokenLanguagesTvShowDetail {

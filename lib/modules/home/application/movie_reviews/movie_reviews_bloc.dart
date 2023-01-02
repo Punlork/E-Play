@@ -17,7 +17,7 @@ class MovieReviewsBloc extends Bloc<MovieReviewsEvent, MovieReviewsState> {
   ) async {
     emit(MovieReviewsLoading());
     final result = await repository.getMovieReviews(
-      movieId: event.movieId,
+      url: event.url,
       pageNumber: event.pageNumber,
     );
     result.fold(

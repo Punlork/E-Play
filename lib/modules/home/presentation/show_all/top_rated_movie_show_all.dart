@@ -10,6 +10,11 @@ class TopRatedMovieShowAll extends StatelessWidget {
     path: routePath,
     name: routeName,
     builder: (context, state) => const TopRatedMovieShowAll(),
+    pageBuilder: (context, state) => AppRouteTransition(
+      context: context,
+      state: state,
+      child: const TopRatedMovieShowAll(),
+    ),
   );
 
   @override

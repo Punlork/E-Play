@@ -9,10 +9,10 @@ abstract class MovieReviewsEvent extends Equatable {
 
 class OnGetMovieReviews extends MovieReviewsEvent {
   const OnGetMovieReviews({
-    required this.movieId,
+    required this.url,
     required this.pageNumber,
   });
 
-  final int movieId;
+  final String url;
   final int pageNumber;
 }

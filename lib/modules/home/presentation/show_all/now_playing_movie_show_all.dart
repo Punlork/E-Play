@@ -10,6 +10,11 @@ class NowPlayingMovieShowAll extends StatelessWidget {
     name: routeName,
     path: routePath,
     builder: (context, state) => const NowPlayingMovieShowAll(),
+    pageBuilder: (context, state) => AppRouteTransition(
+      context: context,
+      state: state,
+      child: const NowPlayingMovieShowAll(),
+    ),
   );
 
   @override

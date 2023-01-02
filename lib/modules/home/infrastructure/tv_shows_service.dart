@@ -11,9 +11,7 @@ class TVShowsService {
   }
 
   Future<TvShowDetailModel> getTvShowDetail(int tvShowId) async {
-    final response = await _dio.get<dynamic>(
-      AppData.getTvShowDetail(tvShowId: tvShowId),
-    );
+    final response = await _dio.get<dynamic>(AppData.getTvShowDetail(tvShowId: ''));
     return TvShowDetailModel.fromJson(response.data);
   }
 
@@ -30,8 +28,7 @@ class TVShowsService {
   }) async {
     final response = await _dio.get<dynamic>(
       AppData.getTvShowSuggestion(
-        tvShowId: tvShowId,
-        pageNumber: pageNumber,
+        tvShowId: 'tvShowId',
       ),
     );
     return TvShowSuggestion.fromJson(response.data);
@@ -47,10 +44,7 @@ class TVShowsService {
     required int tvShowId,
   }) async {
     final response = await _dio.get<dynamic>(
-      AppData.getTvShowReviews(
-        pageNumber: pageNumber,
-        tvShowId: tvShowId,
-      ),
+      AppData.getTvShowReviews(tvShowId: 'tvShowId'),
     );
     return TvShowReviews.fromJson(response.data);
   }

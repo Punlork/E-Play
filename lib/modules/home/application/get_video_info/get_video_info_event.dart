@@ -8,7 +8,7 @@ abstract class GetVideoInfoEvent extends Equatable {
 }
 
 class OnGetVideoInfo extends GetVideoInfoEvent {
-  const OnGetVideoInfo(this.movieId);
+  const OnGetVideoInfo(this.url);
 
-  final int movieId;
+  final String url;
 }

@@ -16,7 +16,7 @@ class GetVideoInfoBloc extends Bloc<GetVideoInfoEvent, GetVideoInfoState> {
     Emitter<GetVideoInfoState> emit,
   ) async {
     emit(GetVideoInfoLoading());
-    final result = await repository.getVideoInfo(movieId: event.movieId);
+    final result = await repository.getVideoInfo(url: event.url);
     result.fold(
       (l) => emit(GetVideoInfoFailed(l)),
       (r) => emit(GetVideoInfoLoaded(r.results)),

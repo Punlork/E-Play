@@ -18,6 +18,7 @@ class ShowAllBloc extends Bloc<ShowAllEvent, ShowAllState> {
     ShowAllFetched event,
     Emitter<ShowAllState> emit,
   ) async {
+    listOfShowAll.clear();
     emit(ShowAllLoading());
     final result = await repository.showAllFetched(
       url: event.url,

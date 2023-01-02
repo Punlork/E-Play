@@ -6,12 +6,8 @@ class MovieService {
 
   final Dio service;
 
-  Future<VideoModel> getVideoInfo({required int movieId}) async {
-    final response = await service.get<dynamic>(
-      AppData.getVideoInfo(
-        movieId: movieId,
-      ),
-    );
+  Future<VideoModel> getVideoInfo({required String url}) async {
+    final response = await service.get<dynamic>(url);
     return VideoModel.fromJson(response.data);
   }
 
@@ -24,22 +20,19 @@ class MovieService {
     return movie.data;
   }
 
-  Future<MovieDetailResModel> getMovieDetail({required int movieId}) async {
-    final response = await service.get<dynamic>(AppData.getMovieDetail(movieId.toString()));
-    final movie = MovieDetailResModel.fromJson(response.data);
+  Future<MovieAndSeriesDetailResModel> getMovieDetail({
+    required String url,
+  }) async {
+    final response = await service.get<dynamic>(url);
+    final movie = MovieAndSeriesDetailResModel.fromJson(response.data);
     return movie;
   }
 
   Future<List<MovieSuggestionResults>> getMovieSuggestion({
-    required int movieId,
     required int pageNumber,
+    required String url,
   }) async {
-    final response = await service.get<dynamic>(
-      AppData.getMovieSuggestion(
-        movieId: movieId.toString(),
-        pageNumber: pageNumber.toString(),
-      ),
-    );
+    final response = await service.get<dynamic>('$url$pageNumber');
     final movie = MovieSuggestion.fromJson(response.data);
     return movie.results;
   }
@@ -74,14 +67,9 @@ class MovieService {
 
   Future<MovieReviews> getMovieReviews({
     required int pageNumber,
-    required int movieId,
+    required String url,
   }) async {
-    final response = await service.get<dynamic>(
-      AppData.getMovieReviews(
-        pageNumber: pageNumber,
-        movieId: movieId,
-      ),
-    );
+    final response = await service.get<dynamic>('$url$pageNumber');
     return MovieReviews.fromJson(response.data);
   }
 }
