@@ -1,5 +1,4 @@
 import 'package:e_book_app/index.dart';
-import 'package:e_book_app/modules/home/domain/tv_shows/tv_show_reviews_model.dart';
 
 class TVShowsService {
   TVShowsService(this._dio);
@@ -7,9 +6,7 @@ class TVShowsService {
   final Dio _dio;
 
   Future<PopularTVShowModel> getPopularTvShows(String pageNumber) async {
-    final response = await _dio.get<dynamic>(
-      AppData.getTVPopularMovies(pageNumber: pageNumber),
-    );
+    final response = await _dio.get<dynamic>(AppData.getTVPopularMovies);
     return PopularTVShowModel.fromJson(response.data);
   }
 
@@ -41,9 +38,7 @@ class TVShowsService {
   }
 
   Future<TopRatedTvShow> getTopRatedTvShow(int pageNumber) async {
-    final response = await _dio.get<dynamic>(
-      AppData.getTopRatedTvShow(pageNumber: pageNumber),
-    );
+    final response = await _dio.get<dynamic>(AppData.getTopRatedTvShow);
     return TopRatedTvShow.fromJson(response.data);
   }
 

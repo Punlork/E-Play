@@ -67,11 +67,15 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
     final maxExtent = _scrollController.position.maxScrollExtent;
 
     if (offset > 100) {
-      _showTitle = true;
-      setState(() {});
+      if (!_showTitle) {
+        _showTitle = true;
+        setState(() {});
+      }
     } else {
-      _showTitle = false;
-      setState(() {});
+      if (_showTitle) {
+        _showTitle = false;
+        setState(() {});
+      }
     }
 
     if (offset == maxExtent && _status != PaginateStatus.empty) {

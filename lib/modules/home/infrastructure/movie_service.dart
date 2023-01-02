@@ -45,24 +45,18 @@ class MovieService {
   }
 
   Future<List<PopularMoviesData>> getPopularMovie(int pageNumber) async {
-    final response = await service.get<dynamic>(AppData.popular(pageNumber));
+    final response = await service.get<dynamic>(AppData.popular);
     final movies = PopularMovies.fromJson(response.data);
     return movies.results;
   }
 
   Future<UpcomingMoviesModel> getUpcomingMovies(int pageNumber) async {
-    final response = await service.get<dynamic>(
-      AppData.getUpcomingMovies(pageNumber: pageNumber),
-    );
+    final response = await service.get<dynamic>(AppData.getUpcomingMovies);
     return UpcomingMoviesModel.fromJson(response.data);
   }
 
   Future<NowPlayMoviesModel> getPlayingNowMovies(int pageNumber) async {
-    final response = await service.get<dynamic>(
-      AppData.getNowPlayingMovies(
-        pageNumber: pageNumber.toString(),
-      ),
-    );
+    final response = await service.get<dynamic>(AppData.getNowPlayingMovies);
     return NowPlayMoviesModel.fromJson(response.data);
   }
 
@@ -74,9 +68,7 @@ class MovieService {
   }
 
   Future<TopRatedMovies> getTopRatedMovies(int pageNumber) async {
-    final response = await service.get<dynamic>(
-      AppData.getTopRatedMovies(pageNumber: pageNumber),
-    );
+    final response = await service.get<dynamic>(AppData.getTopRatedMovies);
     return TopRatedMovies.fromJson(response.data);
   }
 

@@ -46,6 +46,9 @@ export 'presentation/home_tv_show_detail_page.dart';
 
 export 'presentation/show_all/now_playing_movie_show_all.dart';
 export 'presentation/show_all/popular_movie_show_all.dart';
+export 'presentation/show_all/popular_series_show_all.dart';
+export 'presentation/show_all/top_rated_movie_show_all.dart';
+export 'presentation/show_all/top_rated_series_show_all.dart';
 export 'presentation/show_all/upcoming_movie_show_all.dart';
 
 export 'presentation/show_all_movie_series.dart';

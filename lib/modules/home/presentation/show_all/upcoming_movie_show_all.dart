@@ -1,6 +1,6 @@
-import 'package:e_book_app/index.dart';
+import 'dart:developer';
 
-int pageNumber = 1;
+import 'package:e_book_app/index.dart';
 
 class UpcomingMovieShowAll extends StatelessWidget {
   const UpcomingMovieShowAll({super.key});
@@ -16,7 +16,8 @@ class UpcomingMovieShowAll extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final url = AppData.getUpcomingMovies(pageNumber: pageNumber);
+    final url = AppData.getUpcomingMovies;
+
     return ShowAllMovieSeries(
       url: url,
       title: 'Upcoming Movies',

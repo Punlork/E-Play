@@ -42,12 +42,12 @@ class ShowAllModelResult {
         posterPath: json['poster_path'] ?? '',
         adult: json['adult'],
         overview: json['overview'],
-        releaseDate: DateTime.parse(json['release_date']),
+        releaseDate: json['release_date'],
         genreIds: List<int>.from(json['genre_ids'].map((x) => x)),
         id: json['id'],
         originalTitle: json['original_title'],
         originalLanguage: json['original_language'],
-        title: json['title'],
+        title: json['title'] ?? json['name'],
         backdropPath: json['backdrop_path'] ?? '',
         popularity: json['popularity'].toDouble(),
         voteCount: json['vote_count'],
@@ -56,17 +56,17 @@ class ShowAllModelResult {
       );
 
   final String posterPath;
-  final bool adult;
+  final bool? adult;
   final String overview;
-  final DateTime releaseDate;
+  final String? releaseDate;
   final List<int> genreIds;
   final int id;
-  final String originalTitle;
+  final String? originalTitle;
   final String originalLanguage;
   final String title;
   final String backdropPath;
   final double popularity;
   final int voteCount;
-  final bool video;
+  final bool? video;
   final double voteAverage;
 }

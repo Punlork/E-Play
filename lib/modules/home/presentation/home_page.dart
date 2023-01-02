@@ -213,11 +213,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
             AppPadding(
               child: GestureDetector(
                 onTap: () => GoRouter.of(context).pushNamed(
-                  ShowAllMovieSeries.routeName,
-                  queryParams: {
-                    'title': 'In Theater',
-                  },
-                  extra: ShowAllStatus.inTheater,
+                  NowPlayingMovieShowAll.routeName,
                 ),
                 child: Row(
                   children: [
@@ -228,11 +224,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                     CustomIconWidget(
                       icon: Icons.arrow_forward_sharp,
                       onPressed: () => GoRouter.of(context).pushNamed(
-                        ShowAllMovieSeries.routeName,
-                        queryParams: {
-                          'title': 'In Theater',
-                        },
-                        extra: ShowAllStatus.inTheater,
+                        NowPlayingMovieShowAll.routeName,
                       ),
                     ),
                   ],
@@ -328,11 +320,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
             AppPadding(
               child: GestureDetector(
                 onTap: () => GoRouter.of(context).pushNamed(
-                  ShowAllMovieSeries.routeName,
-                  queryParams: {
-                    'title': 'Popular Series',
-                  },
-                  extra: ShowAllStatus.popularSeries,
+                  PopularSeriesShowAll.routeName,
                 ),
                 child: Row(
                   children: [
@@ -343,11 +331,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                     CustomIconWidget(
                       icon: Icons.arrow_forward_sharp,
                       onPressed: () => GoRouter.of(context).pushNamed(
-                        ShowAllMovieSeries.routeName,
-                        queryParams: {
-                          'title': 'Popular Series',
-                        },
-                        extra: ShowAllStatus.popularSeries,
+                        PopularSeriesShowAll.routeName,
                       ),
                     ),
                   ],
@@ -388,11 +372,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
             AppPadding(
               child: GestureDetector(
                 onTap: () => GoRouter.of(context).pushNamed(
-                  ShowAllMovieSeries.routeName,
-                  queryParams: {
-                    'title': 'Top Rated Movies',
-                  },
-                  extra: ShowAllStatus.topRatedMovies,
+                  TopRatedMovieShowAll.routeName,
                 ),
                 child: Row(
                   children: [
@@ -403,11 +383,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                     CustomIconWidget(
                       icon: Icons.arrow_forward_sharp,
                       onPressed: () => GoRouter.of(context).pushNamed(
-                        ShowAllMovieSeries.routeName,
-                        queryParams: {
-                          'title': 'Top Rated Movies',
-                        },
-                        extra: ShowAllStatus.topRatedMovies,
+                        TopRatedMovieShowAll.routeName,
                       ),
                     ),
                   ],
@@ -448,11 +424,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
             AppPadding(
               child: GestureDetector(
                 onTap: () => GoRouter.of(context).pushNamed(
-                  ShowAllMovieSeries.routeName,
-                  queryParams: {
-                    'title': 'Top Rated Series',
-                  },
-                  extra: ShowAllStatus.topRatedSeries,
+                  TopRatedSeriesShowAll.routeName,
                 ),
                 child: Row(
                   children: [
@@ -463,11 +435,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                     CustomIconWidget(
                       icon: Icons.arrow_forward_sharp,
                       onPressed: () => GoRouter.of(context).pushNamed(
-                        ShowAllMovieSeries.routeName,
-                        queryParams: {
-                          'title': 'Top Rated Series',
-                        },
-                        extra: ShowAllStatus.topRatedSeries,
+                        TopRatedSeriesShowAll.routeName,
                       ),
                     ),
                   ],

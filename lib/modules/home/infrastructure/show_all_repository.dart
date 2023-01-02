@@ -3,8 +3,8 @@ import 'package:e_book_app/index.dart';
 
 abstract class ShowAllRepository {
   Future<Either<String, ShowAllModel>> showAllFetched({
-    int pageNumber,
     String url,
+    int pageNumber,
   });
 }
 
@@ -19,8 +19,8 @@ class ShowAllRepositoryImpl implements ShowAllRepository {
   }) async {
     try {
       final response = await _service.showAllFetched(
-        pageNumber: pageNumber,
         url: url,
+        pageNumber: pageNumber,
       );
       return Right(response);
     } catch (e) {

@@ -18,8 +18,7 @@ class AppData {
   }) =>
       '$mainUrl/$movieId/videos?api_key=$apiKey&language=en-US';
 
-  static String popular(int pageNumber) =>
-      '$mainUrl/popular?api_key=$apiKey&language=en-US&page=$pageNumber';
+  static String get popular => '$mainUrl/popular?api_key=$apiKey&language=en-US&page=';
 
   static dynamic getTrending({required String mediaType}) =>
       '$mainUrlTrending/$mediaType/week?api_key=$apiKey';
@@ -36,11 +35,9 @@ class AppData {
   }) =>
       '$mainUrl/$movieId/recommendations?api_key=$apiKey&language=en-US&page=$pageNumber';
 
-  static String getUpcomingMovies({required int pageNumber}) =>
-      '$mainUrl/upcoming?api_key=$apiKey&language=en-US&page=$pageNumber';
+  static String get getUpcomingMovies => '$mainUrl/upcoming?api_key=$apiKey&language=en-US&page=';
 
-  static String getTopRatedMovies({required int pageNumber}) =>
-      '$mainUrl/top_rated?api_key=$apiKey&language=en-US&page=$pageNumber';
+  static String get getTopRatedMovies => '$mainUrl/top_rated?api_key=$apiKey&language=en-US&page=';
 
   static String getMovieReviews({
     required int pageNumber,
@@ -48,11 +45,10 @@ class AppData {
   }) =>
       '$mainUrl/$movieId/reviews?api_key=$apiKey&language=en-US&page=$pageNumber';
 
-  static String getNowPlayingMovies({required String pageNumber}) =>
-      '$mainUrl/now_playing?api_key=$apiKey&language=en-US&page=$pageNumber';
+  static String get getNowPlayingMovies =>
+      '$mainUrl/now_playing?api_key=$apiKey&language=en-US&page=';
 
-  static String getTVPopularMovies({required String pageNumber}) =>
-      '$mainUrlTV/popular?api_key=$apiKey&language=en-US&page=$pageNumber';
+  static String get getTVPopularMovies => '$mainUrlTV/popular?api_key=$apiKey&language=en-US&page=';
 
   static String getTvShowDetail({required int tvShowId}) =>
       '$mainUrlTV/$tvShowId?api_key=$apiKey&language=en-US';
@@ -66,8 +62,8 @@ class AppData {
   }) =>
       '$mainUrlTV/$tvShowId/reviews?api_key=$apiKey&language=en-US&page=$pageNumber';
 
-  static String getTopRatedTvShow({required int pageNumber}) =>
-      '$mainUrlTV/top_rated?api_key=$apiKey&language=en-US&page=$pageNumber';
+  static String get getTopRatedTvShow =>
+      '$mainUrlTV/top_rated?api_key=$apiKey&language=en-US&page=';
 
   static String getTvShowSuggestion({
     required int tvShowId,

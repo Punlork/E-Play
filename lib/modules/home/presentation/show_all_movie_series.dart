@@ -40,6 +40,7 @@ class _ShowAllMovieSeriesState extends State<ShowAllMovieSeries> {
   late ScrollController _scrollController;
   bool _isShowButton = false;
   PaginateStatus status = PaginateStatus.initial;
+  int _pageNumber = 1;
 
   @override
   void initState() {
@@ -52,7 +53,7 @@ class _ShowAllMovieSeriesState extends State<ShowAllMovieSeries> {
 
   @override
   void dispose() {
-    pageNumber = 1;
+    _pageNumber = 1;
     _scrollController
       ..removeListener(_scrollListener)
       ..dispose();
@@ -76,12 +77,11 @@ class _ShowAllMovieSeriesState extends State<ShowAllMovieSeries> {
     }
 
     if (maxScroll && status != PaginateStatus.empty) {
-      pageNumber += 1;
-      log('$pageNumber');
+      _pageNumber += 1;
       BlocProvider.of<ShowAllBloc>(context).add(
         ShowAllFetchedPaginate(
-          pageNumber: pageNumber,
           url: widget.url,
+          pageNumber: _pageNumber,
         ),
       );
     }
@@ -115,9 +115,9 @@ class _ShowAllMovieSeriesState extends State<ShowAllMovieSeries> {
           ],
         ),
         body: AppPadding(
-          child: SingleChildScrollView(
-            controller: _scrollController,
-            child: Center(
+          child: Center(
+            child: SingleChildScrollView(
+              controller: _scrollController,
               child: BlocBuilder<ShowAllBloc, ShowAllState>(
                 builder: (context, state) {
                   if (state is ShowAllFailed) {

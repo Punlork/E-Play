@@ -15,8 +15,8 @@ class MovieReview {
       ),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(32),
-          topRight: Radius.circular(32),
+          topLeft: Radius.circular(6),
+          topRight: Radius.circular(6),
         ),
       ),
       builder: (context) => type == DetailType.movie
@@ -34,7 +34,6 @@ class MovieReview {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       AppPadding(
-                        vertical: 10,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [

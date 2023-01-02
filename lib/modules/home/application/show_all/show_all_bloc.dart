@@ -7,6 +7,7 @@ part 'show_all_state.dart';
 class ShowAllBloc extends Bloc<ShowAllEvent, ShowAllState> {
   ShowAllBloc(this.repository) : super(ShowAllInitial()) {
     on<ShowAllFetched>(_onShowAllFetched);
+    // on<ShowAllClear>(_onShowAllClear);
     on<ShowAllFetchedPaginate>(_onShowAllFetchedPaginate);
   }
 
@@ -37,8 +38,8 @@ class ShowAllBloc extends Bloc<ShowAllEvent, ShowAllState> {
     final stateLoaded = state as ShowAllLoaded;
     emit(stateLoaded.copyWith(status: PaginateStatus.loading));
     final result = await repository.showAllFetched(
-      pageNumber: event.pageNumber,
       url: event.url,
+      pageNumber: event.pageNumber,
     );
     result.fold(
       (l) => emit(stateLoaded.copyWith(status: PaginateStatus.failed)),

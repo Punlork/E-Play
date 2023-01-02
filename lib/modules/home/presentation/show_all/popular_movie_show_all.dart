@@ -14,7 +14,7 @@ class PopularMovieShowAll extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final url = AppData.popular(pageNumber);
+    final url = AppData.popular;
     return ShowAllMovieSeries(
       url: url,
       title: 'Popular Movies',

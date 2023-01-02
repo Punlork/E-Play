@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppPadding extends StatelessWidget {
   const AppPadding({
-    Key? key,
+    super.key,
     required this.child,
     this.horizontal = 16,
     this.vertical = 0,
@@ -11,7 +11,7 @@ class AppPadding extends StatelessWidget {
     this.left = 16,
     this.right = 16,
     this.top = 0,
-  }) : super(key: key);
+  });
 
   final Widget child;
 

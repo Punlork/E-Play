@@ -15,10 +15,12 @@ class ShowAllFetched extends ShowAllEvent {
 
 class ShowAllFetchedPaginate extends ShowAllEvent {
   const ShowAllFetchedPaginate({
-    required this.pageNumber,
     required this.url,
+    required this.pageNumber,
   });
 
-  final int pageNumber;
   final String url;
+  final int pageNumber;
 }
+
+class ShowAllClear extends ShowAllEvent {}
