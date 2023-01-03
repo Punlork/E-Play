@@ -21,6 +21,7 @@ class NowPlayingMovieShowAll extends StatelessWidget {
   Widget build(BuildContext context) {
     final url = AppData.getNowPlayingMovies;
     return ShowAllMovieSeries(
+      type: DetailType.movie,
       title: 'In Theater',
       url: url,
     );

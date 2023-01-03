@@ -23,6 +23,7 @@ class UpcomingMovieShowAll extends StatelessWidget {
   Widget build(BuildContext context) {
     final url = AppData.getUpcomingMovies;
     return ShowAllMovieSeries(
+      type: DetailType.movie,
       url: url,
       title: 'Upcoming Movies',
     );

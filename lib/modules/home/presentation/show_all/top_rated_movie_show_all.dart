@@ -21,6 +21,7 @@ class TopRatedMovieShowAll extends StatelessWidget {
   Widget build(BuildContext context) {
     final url = AppData.getTopRatedMovies;
     return ShowAllMovieSeries(
+      type: DetailType.movie,
       title: 'Top Rated Movies',
       url: url,
     );

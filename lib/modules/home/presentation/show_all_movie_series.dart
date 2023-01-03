@@ -7,6 +7,7 @@ class ShowAllMovieSeries extends StatefulWidget {
     super.key,
     required this.url,
     required this.title,
+    required this.type,
   });
 
   static const String routeName = 'show_all_movie_series';
@@ -14,6 +15,7 @@ class ShowAllMovieSeries extends StatefulWidget {
 
   final String url;
   final String title;
+  final DetailType? type;
 
   static final GoRoute route = GoRoute(
     name: routeName,
@@ -21,6 +23,7 @@ class ShowAllMovieSeries extends StatefulWidget {
     builder: (context, state) => ShowAllMovieSeries(
       title: state.queryParams['title'] ?? '',
       url: state.queryParams['url'] ?? '',
+      type: state.extra as DetailType?,
     ),
   );
 
@@ -123,13 +126,75 @@ class _ShowAllMovieSeriesState extends State<ShowAllMovieSeries> {
 
                     for (final element in state.showAll) {
                       listOfShowAll.add(
-                        MoviesTvShowCardBox(
-                          type: DetailType.movie,
-                          id: element.id,
-                          imgUrl: element.posterPath,
-                          title: element.title,
-                          rating: element.popularity,
-                        ),
+                        !_isGrid
+                            ? GestureDetector(
+                                onTap: () {
+                                  if (widget.type == DetailType.movie) {
+                                    GoRouter.of(context).pushNamed(
+                                      MovieDetailPage.routeName,
+                                      queryParams: {'movie_id': '${element.id}'},
+                                    );
+                                  }
+                                  if (widget.type == DetailType.tvShow) {
+                                    GoRouter.of(context).pushNamed(
+                                      SeriesDetailPage.routeName,
+                                      queryParams: {'tv_show_id': '${element.id}'},
+                                    );
+                                  }
+                                },
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    MoviesTvShowCardBox(
+                                      type: widget.type!,
+                                      id: element.id,
+                                      imgUrl: element.posterPath,
+                                      title: element.title,
+                                      rating: element.popularity,
+                                    ),
+                                    Flexible(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            element.title,
+                                            style: Theme.of(context).textTheme.labelMedium,
+                                          ),
+                                          const Spacer(),
+                                          Row(
+                                            children: [
+                                              Image.network(
+                                                'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/IMDB_Logo_2016.svg/2560px-IMDB_Logo_2016.svg.png',
+                                                height: 20,
+                                                width: 50,
+                                                fit: BoxFit.cover,
+                                              ),
+                                              const SizedBox(width: 10),
+                                              Text(
+                                                element.voteAverage.toString(),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleLarge!
+                                                    .copyWith(
+                                                      fontSize: 14,
+                                                    ),
+                                              ),
+                                            ],
+                                          ),
+                                          const Spacer(),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : MoviesTvShowCardBox(
+                                type: DetailType.movie,
+                                id: element.id,
+                                imgUrl: element.posterPath,
+                                title: element.title,
+                                rating: element.popularity,
+                              ),
                       );
                     }
 
@@ -141,8 +206,8 @@ class _ShowAllMovieSeriesState extends State<ShowAllMovieSeries> {
                           physics: const NeverScrollableScrollPhysics(),
                           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: _isGrid ? 3 : 1,
-                            childAspectRatio: .75,
-                            mainAxisSpacing: 15,
+                            childAspectRatio: _isGrid ? .7 : 4,
+                            mainAxisSpacing: 10,
                           ),
                           itemBuilder: (context, index) => index >= state.showAll.length
                               ? const BottomLoader()

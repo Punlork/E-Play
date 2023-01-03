@@ -18,5 +18,6 @@ final appRouter = GoRouter(
     PopularSeriesShowAll.route,
     TopRatedMovieShowAll.route,
     TopRatedSeriesShowAll.route,
+    FullScreenImage.route,
   ],
 );

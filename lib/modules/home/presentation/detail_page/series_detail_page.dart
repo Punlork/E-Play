@@ -14,7 +14,7 @@ class SeriesDetailPage extends StatelessWidget {
     builder: (context, state) => SeriesDetailPage(
       tvShowId: state.queryParams['tv_show_id'] ?? '',
     ),
-    pageBuilder: (context, state) => AppRouteTransition<SeriesDetailPage>(
+    pageBuilder: (context, state) => AppRouteTransition(
       context: context,
       state: state,
       child: SeriesDetailPage(

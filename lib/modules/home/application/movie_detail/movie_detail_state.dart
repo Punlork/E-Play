@@ -12,9 +12,11 @@ class MovieDetailInitial extends MovieDetailState {}
 class MovieDetailLoading extends MovieDetailState {}
 
 class MovieDetailLoaded extends MovieDetailState {
-  const MovieDetailLoaded(this.movieDetail);
+  const MovieDetailLoaded({
+    this.movieDetail,
+  });
 
-  final MovieAndSeriesDetailResModel movieDetail;
+  final MovieAndSeriesDetailResModel? movieDetail;
 }
 
 class MovieDetailFailed extends MovieDetailState {

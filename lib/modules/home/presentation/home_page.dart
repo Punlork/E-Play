@@ -185,7 +185,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                 if (state is UpcomingMoviesLoaded) {
                   final upcomingMovie = state.upComingMovies;
                   return SizedBox.fromSize(
-                    size: const Size.fromHeight(150),
+                    size: const Size.fromHeight(130),
                     child: ListView.builder(
                       itemBuilder: (context, index) => MoviesTvShowCardBox(
                         type: DetailType.movie,
@@ -243,7 +243,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                   final nowPlaying = state.nowPlayingMovies;
 
                   return SizedBox.fromSize(
-                    size: const Size.fromHeight(150),
+                    size: const Size.fromHeight(130),
                     child: ListView.builder(
                       itemBuilder: (context, index) => MoviesTvShowCardBox(
                         type: DetailType.movie,
@@ -296,7 +296,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                 }
                 if (state is PopularMoviesLoaded) {
                   return SizedBox.fromSize(
-                    size: const Size.fromHeight(150),
+                    size: const Size.fromHeight(130),
                     child: ListView.builder(
                       itemBuilder: (context, index) => MoviesTvShowCardBox(
                         type: DetailType.movie,
@@ -349,7 +349,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                 if (state is PopularTvShowsLoaded) {
                   final popularTvShows = state.popularTvShows;
                   return SizedBox.fromSize(
-                    size: const Size.fromHeight(150),
+                    size: const Size.fromHeight(130),
                     child: ListView.builder(
                       itemBuilder: (context, index) => MoviesTvShowCardBox(
                         type: DetailType.tvShow,
@@ -401,7 +401,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                 if (state is TopRatedMoviesLoaded) {
                   final topRatedMovies = state.topRatedMovies;
                   return SizedBox.fromSize(
-                    size: const Size.fromHeight(150),
+                    size: const Size.fromHeight(130),
                     child: ListView.builder(
                       itemBuilder: (context, index) => MoviesTvShowCardBox(
                         type: DetailType.movie,
@@ -453,7 +453,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                 if (state is TopRatedTvShowLoaded) {
                   final topRatedTvShow = state.topRatedTvShow;
                   return SizedBox.fromSize(
-                    size: const Size.fromHeight(150),
+                    size: const Size.fromHeight(130),
                     child: ListView.builder(
                       itemBuilder: (context, index) => MoviesTvShowCardBox(
                         type: DetailType.tvShow,

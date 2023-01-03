@@ -1,3 +1,4 @@
+import 'package:e_book_app/index.dart';
 import 'package:e_book_app/modules/home/presentation/home_page.dart';
 import 'package:e_book_app/modules/setting/presentation/settings_page.dart';
 import 'package:flutter/material.dart';
@@ -71,6 +72,7 @@ class _MainPageState extends State<MainPage> {
           currentIndex: _selectedIndex,
           selectedFontSize: 12,
           type: BottomNavigationBarType.fixed,
+          selectedItemColor: AppColors.red,
           unselectedItemColor: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor,
           elevation: 0,
           items: const [

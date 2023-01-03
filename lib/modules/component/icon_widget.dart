@@ -7,21 +7,26 @@ class CustomIconWidget extends StatelessWidget {
     this.onPressed,
     this.size = 20,
     this.splashRadius = 20,
+    this.color,
   });
 
   final IconData icon;
   final VoidCallback? onPressed;
   final double? size;
   final double? splashRadius;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: onPressed,
-      icon: Icon(icon),
-      color: Theme.of(context).iconTheme.color,
-      splashRadius: splashRadius,
-      iconSize: size,
+    return Material(
+      color: Colors.transparent,
+      child: IconButton(
+        onPressed: onPressed,
+        icon: Icon(icon),
+        color: color ?? Theme.of(context).iconTheme.color,
+        splashRadius: splashRadius,
+        iconSize: size,
+      ),
     );
   }
 }

@@ -40,7 +40,7 @@ export 'infrastructure/show_all_service.dart';
 export 'infrastructure/tv_shows_repository.dart';
 export 'infrastructure/tv_shows_service.dart';
 
-export 'presentation/detail_page/home_movie_detail_page.dart';
+export 'presentation/detail_page/home_detail_page.dart';
 export 'presentation/detail_page/movie_detail_page.dart';
 export 'presentation/detail_page/series_detail_page.dart';
 export 'presentation/home_page.dart';

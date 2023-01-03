@@ -9,7 +9,7 @@ class ShimmerLoading extends StatelessWidget {
       baseColor: AppColors.gray,
       highlightColor: AppColors.white,
       child: SizedBox(
-        height: 150,
+        height: 130,
         child: ListView.builder(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           itemBuilder: (context, index) => Padding(

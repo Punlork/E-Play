@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:e_book_app/index.dart';
 
 class ImageCardWidget extends StatelessWidget {
@@ -20,10 +22,12 @@ class ImageCardWidget extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(6),
         child: Image.network(
-          AppData.imagePath(
-            posterPath: imgUrl,
-          ),
+          AppData.imagePath(posterPath: imgUrl),
           fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) => const AspectRatio(
+            aspectRatio: .7,
+            child: ColoredBox(color: AppColors.gray),
+          ),
         ),
       ),
     );
