@@ -167,6 +167,7 @@ class _ShowAllMovieSeriesState extends State<ShowAllMovieSeries> {
                                                 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/IMDB_Logo_2016.svg/2560px-IMDB_Logo_2016.svg.png',
                                                 height: 20,
                                                 width: 50,
+                                                cacheHeight: 50,
                                                 fit: BoxFit.cover,
                                               ),
                                               const SizedBox(width: 10),

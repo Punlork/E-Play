@@ -49,7 +49,7 @@ class HomeDetailPage extends StatefulWidget {
   State<HomeDetailPage> createState() => _HomeDetailPageState();
 }
 
-class _HomeDetailPageState extends State<HomeDetailPage> {
+class _HomeDetailPageState extends State<HomeDetailPage> with AutomaticKeepAliveClientMixin {
   int movieIndex = 2;
   String _title = '';
   String videoId = '';
@@ -133,6 +133,7 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return MultiBlocListener(
       listeners: [
         BlocListener<MovieSuggestionBloc, MovieSuggestionState>(
@@ -459,6 +460,9 @@ class _HomeDetailPageState extends State<HomeDetailPage> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class GenreDescription extends StatelessWidget {

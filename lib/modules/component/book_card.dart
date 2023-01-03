@@ -32,11 +32,13 @@ class BookItemCard extends StatelessWidget {
                     child: Image.network(
                       AppData.imagePath(posterPath: imgUrl),
                       fit: BoxFit.fitHeight,
+                      cacheHeight: 100,
                     ),
                   )
                 : Image.network(
                     AppData.imagePath(posterPath: imgUrl),
                     fit: BoxFit.fitHeight,
+                    cacheHeight: 400,
                   ),
           ),
         ),
@@ -58,6 +60,7 @@ class BookItemCard extends StatelessWidget {
                     height: 20,
                     width: 50,
                     fit: BoxFit.cover,
+                    cacheHeight: 100,
                   ),
                   const SizedBox(width: 10),
                   Text(

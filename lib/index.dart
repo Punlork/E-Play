@@ -1,3 +1,4 @@
+export 'package:cached_network_image/cached_network_image.dart';
 export 'package:dio/dio.dart';
 export 'package:e_book_app/modules/dependencies_injection.dart';
 export 'package:equatable/equatable.dart';

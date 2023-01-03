@@ -21,13 +21,14 @@ class ImageCardWidget extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(6),
-        child: Image.network(
-          AppData.imagePath(posterPath: imgUrl),
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) => const AspectRatio(
+        child: CachedNetworkImage(
+          imageUrl: AppData.imagePath(posterPath: imgUrl),
+          errorWidget: (context, url, error) => const AspectRatio(
             aspectRatio: .7,
             child: ColoredBox(color: AppColors.gray),
           ),
+          memCacheHeight: 300,
+          // memCacheWidth: 300,
         ),
       ),
     );
