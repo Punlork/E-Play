@@ -30,6 +30,7 @@ class SeriesDetailPage extends StatelessWidget {
     final reviewUrl = AppData.getTvShowReviews(tvShowId: tvShowId);
     final videoUrl = AppData.getVideoInfo(movieId: tvShowId);
     return HomeDetailPage(
+      type: DetailType.tvShow,
       url: url,
       suggestionUrl: suggestionUrl,
       reviewUrl: reviewUrl,

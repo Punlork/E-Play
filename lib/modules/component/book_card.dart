@@ -38,7 +38,7 @@ class BookItemCard extends StatelessWidget {
                 : Image.network(
                     AppData.imagePath(posterPath: imgUrl),
                     fit: BoxFit.fitHeight,
-                    cacheHeight: 400,
+                    cacheHeight: 300,
                   ),
           ),
         ),

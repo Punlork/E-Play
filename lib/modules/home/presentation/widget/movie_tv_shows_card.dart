@@ -8,6 +8,7 @@ class MoviesTvShowCardBox extends StatelessWidget {
     this.rating,
     required this.title,
     required this.type,
+    this.cacheHeight = 300,
   });
 
   final int id;
@@ -15,6 +16,7 @@ class MoviesTvShowCardBox extends StatelessWidget {
   final num? rating;
   final String title;
   final DetailType type;
+  final int cacheHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +42,7 @@ class MoviesTvShowCardBox extends StatelessWidget {
       child: ImageCardWidget(
         imgUrl: imgUrl,
         rating: rating,
+        cacheHeight: cacheHeight,
       ),
     );
   }

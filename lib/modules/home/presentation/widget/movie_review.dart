@@ -2,10 +2,10 @@ import 'package:e_book_app/index.dart';
 
 class MovieReview {
   MovieReview._();
+
   static void showMovieReview(
     BuildContext context, {
-    required DetailType type,
-    ScrollController? tvShowController,
+    required String url,
   }) {
     showModalBottomSheet<dynamic>(
       context: context,
@@ -19,136 +19,118 @@ class MovieReview {
           topRight: Radius.circular(6),
         ),
       ),
-      builder: (context) => type == DetailType.movie
-          ? BlocBuilder<MovieReviewsBloc, MovieReviewsState>(
-              builder: (context, state) {
-                if (state is MovieReviewsFailed) {
-                  return Text(state.message);
-                }
-                if (state is MovieReviewsLoading) {
-                  return const CircularProgressIndicator();
-                }
-                if (state is MovieReviewsLoaded) {
-                  final movieReviews = state.movieReviews;
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      AppPadding(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      builder: (context) {
+        final controller = ScrollController();
+        final bloc = context.read<MovieReviewsBloc>();
+        // ignore: omit_local_variable_types
+        int pageNumber = 1;
+
+        controller.addListener(() {
+          final maxExtent = controller.position.atEdge;
+
+          if (maxExtent && !bloc.isReachedLimit) {
+            pageNumber += 1;
+            bloc.add(
+              OnGetMovieReviewsNext(
+                url: url,
+                pageNumber: pageNumber,
+              ),
+            );
+          }
+        });
+
+        return BlocBuilder<MovieReviewsBloc, MovieReviewsState>(
+          builder: (context, state) {
+            if (state is MovieReviewsFailed) {
+              return Text(state.message);
+            }
+            if (state is MovieReviewsLoading) {
+              return const CircularProgressIndicator();
+            }
+            if (state is MovieReviewsLoaded) {
+              final movieReviews = state.movieReviews;
+
+              final _listOfReviews = <Widget>[];
+
+              for (final element in movieReviews) {
+                _listOfReviews.add(
+                  _ReviewDetail(
+                    imagePath: element.authorDetails.avatarPath,
+                    name: element.authorDetails.name,
+                    rating: element.authorDetails.rating,
+                    reviews: element.content,
+                  ),
+                );
+              }
+
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  AppPadding(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Movie Reviews',
+                          style: Theme.of(context).textTheme.headlineLarge,
+                        ),
+                        CustomIconWidget(
+                          icon: Icons.clear,
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  const AppPadding(child: Divider()),
+                  if (movieReviews.isNotEmpty) ...[
+                    Flexible(
+                      child: SingleChildScrollView(
+                        controller: controller,
+                        child: Column(
                           children: [
-                            Text(
-                              'Movie Reviews',
-                              style: Theme.of(context).textTheme.headlineLarge,
+                            ListView.separated(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              separatorBuilder: (context, index) => const Divider(),
+                              itemBuilder: (context, index) => index >= movieReviews.length
+                                  ? const BottomLoader()
+                                  : _listOfReviews[index],
+                              itemCount: state.hasReachLimit
+                                  ? movieReviews.length
+                                  : movieReviews.length + 1,
                             ),
-                            CustomIconWidget(
-                              icon: Icons.clear,
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            ),
+                            if (state.status == PaginateStatus.empty)
+                              AppPadding(
+                                vertical: 20,
+                                child: Text(
+                                  'End',
+                                  style: Theme.of(context).textTheme.titleLarge,
+                                ),
+                              ),
                           ],
                         ),
                       ),
-                      const AppPadding(child: Divider()),
-                      if (movieReviews.isNotEmpty)
-                        Flexible(
-                          child: ListView.separated(
-                            separatorBuilder: (context, index) => const Divider(),
-                            itemBuilder: (context, index) {
-                              return _ReviewDetail(
-                                imagePath: movieReviews[index].authorDetails.avatarPath,
-                                name: movieReviews[index].authorDetails.name,
-                                rating: movieReviews[index].authorDetails.rating,
-                                reviews: movieReviews[index].content,
-                              );
-                              // return
-                            },
-                            itemCount: movieReviews.length,
-                          ),
-                        )
-                      else
-                        Column(
-                          children: [
-                            const SizedBox(height: 20),
-                            Text(
-                              'No Review',
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                            const SizedBox(height: 20),
-                          ],
+                    ),
+                  ] else
+                    Column(
+                      children: [
+                        const SizedBox(height: 20),
+                        Text(
+                          'No Review',
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
-                    ],
-                  );
-                }
-                return const Text(AppData.somethingWentWrong);
-              },
-            )
-          : BlocBuilder<TvShowReviewsBloc, TvShowReviewsState>(
-              builder: (context, state) {
-                if (state is TvShowReviewsLoading) {
-                  return const CircularProgressIndicator();
-                }
-                if (state is TvShowReviewsFailed) {
-                  return Text(state.message);
-                }
-                if (state is TvShowReviewsLoaded) {
-                  final tvShowReviews = state.tvShowReviews;
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      AppPadding(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Series Reviews',
-                              style: Theme.of(context).textTheme.headlineLarge,
-                            ),
-                            CustomIconWidget(
-                              icon: Icons.clear,
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                      const AppPadding(child: Divider()),
-                      if (tvShowReviews.isNotEmpty)
-                        Flexible(
-                          child: ListView.separated(
-                            controller: tvShowController,
-                            separatorBuilder: (context, index) => const Divider(),
-                            itemBuilder: (context, index) {
-                              return _ReviewDetail(
-                                imagePath: tvShowReviews[index].authorDetails.avatarPath,
-                                name: tvShowReviews[index].authorDetails.name,
-                                rating: tvShowReviews[index].authorDetails.rating,
-                                reviews: tvShowReviews[index].content,
-                              );
-                              // return
-                            },
-                            itemCount: tvShowReviews.length,
-                          ),
-                        )
-                      else
-                        Column(
-                          children: [
-                            const SizedBox(height: 20),
-                            Text(
-                              'No Review',
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                            const SizedBox(height: 20),
-                          ],
-                        ),
-                    ],
-                  );
-                }
-                return const Text(AppData.somethingWentWrong);
-              },
-            ),
+                        const SizedBox(height: 20),
+                      ],
+                    ),
+                ],
+              );
+            }
+            return const Text(AppData.somethingWentWrong);
+          },
+        );
+      },
     );
   }
 }

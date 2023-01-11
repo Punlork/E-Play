@@ -17,7 +17,7 @@ abstract class MovieRepository {
   Future<Either<String, List<PopularMoviesData>>> getPopularMovies({int pageNumber});
   Future<Either<String, UpcomingMoviesModel>> getUpcomingMovies({int pageNumber});
   Future<Either<String, NowPlayMoviesModel>> getNowPlayingMovies({int pageNumber});
-  Future<Either<String, VideoModel>> getVideoInfo({String url });
+  Future<Either<String, VideoModel>> getVideoInfo({String url});
   Future<Either<String, TrendingModel>> getTrending({String mediaType});
   Future<Either<String, TopRatedMovies>> getTopRatedMovies({int pageNumber});
 }

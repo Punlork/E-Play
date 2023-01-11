@@ -142,55 +142,58 @@ class _ShowAllMovieSeriesState extends State<ShowAllMovieSeries> {
                                     );
                                   }
                                 },
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    MoviesTvShowCardBox(
-                                      type: widget.type!,
-                                      id: element.id,
-                                      imgUrl: element.posterPath,
-                                      title: element.title,
-                                      rating: element.popularity,
-                                    ),
-                                    Flexible(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            element.title,
-                                            style: Theme.of(context).textTheme.labelMedium,
-                                          ),
-                                          const Spacer(),
-                                          Row(
-                                            children: [
-                                              Image.network(
-                                                'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/IMDB_Logo_2016.svg/2560px-IMDB_Logo_2016.svg.png',
-                                                height: 20,
-                                                width: 50,
-                                                cacheHeight: 50,
-                                                fit: BoxFit.cover,
-                                              ),
-                                              const SizedBox(width: 10),
-                                              Text(
-                                                element.voteAverage.toString(),
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .titleLarge!
-                                                    .copyWith(
-                                                      fontSize: 14,
-                                                    ),
-                                              ),
-                                            ],
-                                          ),
-                                          const Spacer(),
-                                        ],
+                                child: SizedBox.expand(
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      MoviesTvShowCardBox(
+                                        type: widget.type!,
+                                        id: element.id,
+                                        imgUrl: element.posterPath,
+                                        title: element.title,
+                                        cacheHeight: 171,
+                                        rating: element.popularity,
                                       ),
-                                    ),
-                                  ],
+                                      Flexible(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              element.title,
+                                              style: Theme.of(context).textTheme.labelMedium,
+                                            ),
+                                            const Spacer(),
+                                            Row(
+                                              children: [
+                                                Image.network(
+                                                  'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/IMDB_Logo_2016.svg/2560px-IMDB_Logo_2016.svg.png',
+                                                  height: 20,
+                                                  width: 50,
+                                                  cacheHeight: 50,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                                const SizedBox(width: 10),
+                                                Text(
+                                                  element.voteAverage.toString(),
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .titleLarge!
+                                                      .copyWith(
+                                                        fontSize: 14,
+                                                      ),
+                                                ),
+                                              ],
+                                            ),
+                                            const Spacer(),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               )
                             : MoviesTvShowCardBox(
-                                type: DetailType.movie,
+                                type: widget.type!,
                                 id: element.id,
                                 imgUrl: element.posterPath,
                                 title: element.title,
@@ -211,7 +214,15 @@ class _ShowAllMovieSeriesState extends State<ShowAllMovieSeries> {
                             mainAxisSpacing: 10,
                           ),
                           itemBuilder: (context, index) => index >= state.showAll.length
-                              ? const BottomLoader()
+                              ? const Center(
+                                  child: SizedBox(
+                                    height: 24,
+                                    width: 24,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 5,
+                                    ),
+                                  ),
+                                )
                               : listOfShowAll[index],
                           itemCount:
                               state.hasReachLimit ? state.showAll.length : state.showAll.length + 1,

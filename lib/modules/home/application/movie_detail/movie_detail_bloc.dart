@@ -30,8 +30,6 @@ class MovieDetailBloc extends Bloc<MovieDetailEvent, MovieDetailState> {
         emit(MovieDetailLoaded(movieDetail: _listMovie.last)),
       },
     );
-    // log(_listMovie.last.title);
-    log(_listMovie.length.toString());
   }
 
   FutureOr<void> _onRemoveMovieDetail(
@@ -45,6 +43,5 @@ class MovieDetailBloc extends Bloc<MovieDetailEvent, MovieDetailState> {
     } else {
       _listMovie.clear();
     }
-    log(_listMovie.length.toString());
   }
 }

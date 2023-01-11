@@ -331,14 +331,14 @@ class _HomeTvShowDetailPageState extends State<HomeTvShowDetailPage> {
                                               ],
                                             ),
                                             const SizedBox(height: 20),
-                                            CustomElevatedButton(
-                                              title: 'Reviews',
-                                              onPressed: () => MovieReview.showMovieReview(
-                                                context,
-                                                type: DetailType.tvShow,
-                                                tvShowController: _seriesReviewScrollController,
-                                              ),
-                                            )
+                                            // CustomElevatedButton(
+                                            //   title: 'Reviews',
+                                            //   onPressed: () => MovieReview.showMovieReview(
+                                            //     context,
+                                            //     type: DetailType.tvShow,
+                                            //     tvShowController: _seriesReviewScrollController,
+                                            //   ),
+                                            // )
                                           ],
                                         ),
                                       )
