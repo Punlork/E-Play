@@ -1,3 +1,4 @@
+import 'package:e_book_app/index.dart';
 import 'package:e_book_app/modules/app/application/theme/theme_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,12 +21,30 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  final List<SettingsModel> _model = [
-    // SettingsModel(name: 'Favorite', icon: Icons.favorite_border),
-    // SettingsModel(name: 'Downloads', icon: Icons.download),
-    SettingsModel(name: 'About', icon: Icons.error),
-    // SettingsModel(name: 'Liences', icon: Icons.description),
-  ];
+  late final _model = <SettingsModel>[];
+
+  @override
+  void initState() {
+    _model.addAll([
+      // SettingsModel(name: 'Favorite', icon: Icons.favorite_border),
+      // SettingsModel(name: 'Downloads', icon: Icons.download),
+      SettingsModel(
+        name: 'Profile',
+        icon: Icons.person,
+        onTap: () => GoRouter.of(context).pushNamed(
+          ProfilePage.routeName,
+        ),
+      ),
+      SettingsModel(name: 'About', icon: Icons.error),
+      // SettingsModel(name: 'Liences', icon: Icons.description),
+    ]);
+    super.initState();
+  }
+
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  // }
 
   final bool _isEnable = false;
 
@@ -35,6 +54,7 @@ class _SettingsPageState extends State<SettingsPage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
+        
         title: Text(
           'Settings',
           style: Theme.of(context).textTheme.headlineLarge,
@@ -98,7 +118,7 @@ class _CustomSettingsButton extends StatelessWidget {
             model.name,
             style: Theme.of(context).textTheme.labelLarge,
           ),
-          onTap: () {},
+          onTap: model.onTap,
         ),
         const Divider(),
       ],
@@ -110,8 +130,10 @@ class SettingsModel {
   SettingsModel({
     required this.name,
     required this.icon,
+    this.onTap,
   });
 
   final String name;
   final IconData icon;
+  final VoidCallback? onTap;
 }

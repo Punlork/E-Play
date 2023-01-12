@@ -32,6 +32,7 @@ dependencies:
   youtube_player_flutter: ^8.1.1
   cached_network_image: ^3.2.3
   flutter_cache_manager: ^3.3.0
+  loading_more_list: ^5.0.2
 
 dev_dependencies:
   bloc_test: ^9.1.0
