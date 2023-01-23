@@ -28,7 +28,7 @@ dependencies:
   shared_preferences: ^2.0.15
   shimmer: ^2.0.0
   stream_transform: ^2.1.0
-  url_launcher: ^6.1.6
+  url_launcher: ^6.1.8
   youtube_player_flutter: ^8.1.1
   cached_network_image: ^3.2.3
   flutter_cache_manager: ^3.3.0
